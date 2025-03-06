@@ -14,8 +14,8 @@ local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
 
--- config.font = wezterm.font("JetBrainsMono Nerd Font")
--- config.font = wezterm.font("0xProto Nerd Font", { weight = "Regular" })
+config.font = wezterm.font("JetBrainsMono Nerd Font")
+--config.font = wezterm.font("0xProto Nerd Font", { weight = "Regular" })
 -- config.font = wezterm.font("ProFont IIx Nerd Font Propo", { weight = "Regular" })
 -- config.font = wezterm.font("ProFontWindows Nerd Font Mono", { weight = "Regular" })
 -- config.font = wezterm.font("FiraCode Nerd Font")

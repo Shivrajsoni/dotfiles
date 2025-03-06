@@ -58,5 +58,3 @@ sketchybar --hotload true
 sketchybar --update
 
 echo "sketchybar configuration loaded.."
-
-sketchybar --set bar sticky=on
