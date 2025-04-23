@@ -15,12 +15,6 @@ local config = wezterm.config_builder()
 -- This is where you actually apply your config choices
 
 config.font = wezterm.font("JetBrainsMono Nerd Font")
---config.font = wezterm.font("0xProto Nerd Font", { weight = "Regular" })
--- config.font = wezterm.font("ProFont IIx Nerd Font Propo", { weight = "Regular" })
--- config.font = wezterm.font("ProFontWindows Nerd Font Mono", { weight = "Regular" })
--- config.font = wezterm.font("FiraCode Nerd Font")
--- config.font = wezterm.font("MesloLGS NF")
--- config.font = wezterm.font("Source Code Pro for Powerline")
 config.font_size = 16
 
 config.enable_tab_bar = false
@@ -37,24 +31,6 @@ config.initial_rows = 300
 config.initial_cols = 300
 config.enable_kitty_keyboard = true
 config.max_fps = 120
--- 	{
--- 		source = { File = { path = "C:\\Users\\Tushya\\Desktop\\Wallpaper\\n6s6uj47jst61.jpg" } },
--- 		height = "Cover",
--- 		width = "Cover",
--- 		horizontal_align = "Center",
--- 		repeat_x = "Repeat",
--- 		repeat_y = "Repeat",
--- 		opacity = 1,
--- 		hsb = {
--- 			brightness = 0.02,
--- 			hue = 1.0,
--- 			saturation = 1.0,
--- 		},
--- 		-- speed = 200,
--- 	},
--- }
---random function
-
 -- background
 
 local h = {}
@@ -103,7 +79,7 @@ M.get_wallpaper = function(dir)
 end
 
 -- Fix: Remove unnecessary `/**` from path
-local path = "/Users/shivraj/Developer/wallpapers"
+local path = "/Users/shivraj/Developer/wallpaper/terminal-wallpaper/"
 
 config.background = { M.get_wallpaper(path) }
 --config.background = {
