@@ -1,4 +1,4 @@
---
+
 -- ██╗    ██╗███████╗███████╗████████╗███████╗██████╗ ███╗   ███╗
 -- ██║    ██║██╔════╝╚══███╔╝╚══██╔══╝██╔════╝██╔══██╗████╗ ████║
 -- ██║ █╗ ██║█████╗    ███╔╝    ██║   █████╗  ██████╔╝██╔████╔██║
@@ -82,20 +82,6 @@ end
 local path = "/Users/shivraj/Developer/wallpaper/terminal-wallpaper/"
 
 config.background = { M.get_wallpaper(path) }
---config.background = {
---{
---source = {
---File = "/Users/shivraj/Developer/wallpapers/iyi33fvg1d161.png",
---},
---opacity = 0.80,
---hsb = { brightness = 0.2, hue = 1.0, saturation = 1.0 },
---height = "Cover",
---width = "Cover",
---horizontal_align = "Center",
---repeat_x = "Repeat",
---	repeat_y = "Repeat",
---	},
---}
 
 -- and finally, return the configuration to wezterm
 return config
