@@ -2,6 +2,7 @@ eval "$(starship init zsh)"
 
 eval "$(zoxide init zsh)"
 
+eval "$(rbenv init - zsh)"
 alias cd='z'
 
 #making yarn bin path add 
