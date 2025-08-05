@@ -13,6 +13,8 @@ export PATH="/opt/homebrew/bin:$PATH"
 
 export PATH="/$HOME/.cargo/bin:$PATH"
 
+
+
 # Replace ls with eza
 alias ls='eza --icons '
 alias ll='eza -lah --icons'  # Long format, human-readable, hidden files
