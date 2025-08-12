@@ -24,8 +24,26 @@ alias lt='eza -T --icons'  # Tree view
 alias lg='eza -l --git --icons'  # Show git status
 #git
 alias gst="git status"
+alias gm="git commit -m"
+alias gca="git commit -a -m"
+alias gp="git push origin HEAD"
+alias gpu="git pull origin"
+alias glog="git log --graph --topo-order --pretty='%w(100,0,6)%C(yellow)%h%C(bold)%C(black)%d %C(cyan)%ar %C(green)%an%n%C(bold)%C(white)%s %N' --abbrev-commit"
+alias gdiff="git diff"
+alias gco="git checkout"
+alias gb='git branch'
+alias gba='git branch -a'
+alias gadd='git add'
+alias ga='git add -p'
+alias gcoall='git checkout -- .'
+alias gr='git remote'
+alias gre='git reset'
 
 alias k='kubectl'
+
+
+# HTTP requests with xh!
+alias http="xh"
 
 
 #Dirs
