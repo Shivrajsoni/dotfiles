@@ -42,9 +42,6 @@ alias gre='git reset'
 alias k='kubectl'
 
 
-# HTTP requests with xh!
-alias http="xh"
-
 
 #Dirs
 alias ..="cd .."
@@ -54,10 +51,6 @@ alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 
 
-#aerospace
-#if ! pgrep -x "AeroSpace" > /dev/null; then
- #   open /Applications/AeroSpace.app
-#fi
 
 # pnpm
 export PNPM_HOME="/Users/shivraj/Library/pnpm"
@@ -96,3 +89,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+
+#!bin/bash
+clear
+fastfetch
