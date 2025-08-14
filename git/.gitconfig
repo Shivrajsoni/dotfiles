@@ -1,0 +1,42 @@
+[user]
+	name = Shivraj Soni 
+	email = shivrajsoni09022005@gmail.com
+  signkey = shivrajsoni09022005@gmail.com
+[pull]
+	rebase = true
+	default = current
+[core]
+	compression = 9
+	whitespace = error
+	preloadindex = true
+[init]
+	defaultBranch = main
+[status]
+	showUntrackedFiles = true
+	showStash = true
+  branch = true
+[push]
+	autoSetupRemote = true
+	default = current
+[diff]
+  context = 3
+  renames = copies
+  interHunkContext = 10
+[pager]
+  diff = delta
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true  # use n and N to move between diff sections
+  dark = true      # or light = true, or omit for auto-detection
+[merge]
+  conflictstyle = zdiff3
+[color "diff"]
+  meta = black bold
+  frag = magenta
+  context = white
+  whitespace = yellow reverse
+; [commit]
+;   gpgsign = true
+; [tag]
+;   gpgSign = true
