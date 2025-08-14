@@ -6,11 +6,8 @@ if [ -z "$NAME" ]; then
   exit 1
 fi
 
-# Get CPU usage using top (macOS way)
-CPU_USAGE=$(top -l 1 | awk -F'[:,]' '/CPU usage/ { gsub(/ /, "", $2); print $2 }')
-
-# Fallback method using ps (less accurate on macOS, but optional)
-# CPU_USAGE=$(ps -A -o %cpu | awk '{s+=$1} END {printf "%.1f%%", s/8}')
+# Get CPU usage
+CPU_PERCENTAGE=$(top -l 1 | awk -F'[ ,%]+' '/CPU usage/ {print int($3 + $5)}')
 
 # Send to sketchybar
-sketchybar --set "$NAME" icon="" label="$CPU_USAGE"
+sketchybar --set "$NAME" label="${CPU_PERCENTAGE}%"

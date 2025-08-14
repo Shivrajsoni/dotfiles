@@ -13,7 +13,7 @@ if [ "$SELECTED" = "true" ]; then
     click_script="$SPACE_CLICK_SCRIPT"
 else
   sketchybar --animate tanh 5 --set "$NAME" \
-    icon.color="$COMMENT" \
+    icon.color="$WHITE" \
     icon="${SPACE_ICONS[$SID - 1]}" \
     click_script="$SPACE_CLICK_SCRIPT"
 fi

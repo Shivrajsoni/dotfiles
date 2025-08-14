@@ -53,6 +53,12 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 
+
+#aerospace
+#if ! pgrep -x "AeroSpace" > /dev/null; then
+ #   open /Applications/AeroSpace.app
+#fi
+
 # pnpm
 export PNPM_HOME="/Users/shivraj/Library/pnpm"
 case ":$PATH:" in

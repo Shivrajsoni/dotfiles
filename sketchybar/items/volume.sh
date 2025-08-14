@@ -5,6 +5,7 @@ COLOR="$GREEN"
 sketchybar \
   --add item sound right \
   --set sound \
+  icon=󰕾 \
   icon.color="$COLOR" \
   icon.padding_left=10 \
   label.color="$COLOR" \
