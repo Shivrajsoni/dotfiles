@@ -50,6 +50,8 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 
+#Shortcuts
+alias r40="rustyvibes ~/Developer/Soundpacks\ 2/cherrymx-black-abs -v 40"
 
 
 # pnpm
