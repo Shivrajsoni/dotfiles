@@ -32,8 +32,8 @@ TRANSPARENT=0x00000000
 ICON_COLOR=$WHITE  # Color of all icons
 LABEL_COLOR=$WHITE # Color of all labels
 
-ITEM_DIR="$HOME/.config/sketchybar/items"
-PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
+ITEM_DIR="$SKETCHYBAR_CONFIG_DIR/items"
+PLUGIN_DIR="$SKETCHYBAR_CONFIG_DIR/plugins"
 
 FONT="JetBrainsMono Nerd Font"
 

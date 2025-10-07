@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
-COLOR="$WHITE"
-
 sketchybar \
   --add item front_app left \
   --set front_app script="$PLUGIN_DIR/front_app.sh" \
-  icon.drawing=off \
-  background.height=26 \
-  background.padding_left=0 \
-  background.padding_right=10 \
-  background.border_width="$BORDER_WIDTH" \
-  background.border_color="$COLOR" \
-  background.corner_radius="$CORNER_RADIUS" \
-  background.color="$BAR_COLOR" \
-  label.color="$COLOR" \
-  label.padding_left=10 \
+  icon="" \
+  icon.font="$FONT:Bold:16.0" \
+  icon.color="$CYAN" \
+  icon.padding_left=10 \
+  label.color="$WHITE" \
   label.padding_right=10 \
+  background.height=26 \
+  background.color=0x00000000 \
+  background.border_color=$COMMENT \
+  background.border_width=1 \
+  background.corner_radius="$CORNER_RADIUS" \
+  background.padding_right=5 \
   associated_display=active \
   --subscribe front_app front_app_switched

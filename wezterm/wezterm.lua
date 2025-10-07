@@ -41,8 +41,10 @@ config.color_scheme = "Catppuccin Mocha"
 --}
 
 -- config.color_scheme =
-config.initial_rows = 300
-config.initial_cols = 300
+wezterm.on("gui-startup", function(cmd)
+	local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
+	window:gui_window():maximize()
+end)
 config.enable_kitty_keyboard = true
 config.max_fps = 120
 -- background

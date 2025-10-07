@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-source "$HOME/.config/sketchybar/variables.sh" # Loads all defined colors
+export SKETCHYBAR_CONFIG_DIR="/Users/shivraj/dotfiles/sketchybar"
+source "$SKETCHYBAR_CONFIG_DIR/variables.sh" # Loads all defined colors
 
 # General bar and defaults
 
@@ -46,6 +47,7 @@ source "$ITEM_DIR/clock.sh"
 source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/volume.sh"
 source "$ITEM_DIR/cpu.sh"
+
 
 #################### Finalizing Setup ####################
 

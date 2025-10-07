@@ -43,6 +43,7 @@ alias k='kubectl'
 
 
 
+
 #Dirs
 alias ..="cd .."
 alias ...="cd ../.."
@@ -101,3 +102,4 @@ fastfetch
 ASYNCAPI_AC_ZSH_SETUP_PATH=/Users/shivraj/Library/Caches/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
 
 
+export PATH="/opt/homebrew/opt/mysql@8.0/bin:$PATH"
