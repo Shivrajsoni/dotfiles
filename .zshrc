@@ -54,11 +54,6 @@ alias ......="cd ../../../../.."
 #Shortcuts
 alias r40="rustyvibes ~/Developer/Soundpacks\ 2/cherrymx-black-abs -v 40"
 
-# Auto-start Aerospace if not already running
-if ! pgrep -x "aerospace" >/dev/null; then
-  echo "🚀 Starting Aerospace..."
-  aerospace run &
-fi
 
 # pnpm
 export PNPM_HOME="/Users/shivraj/Library/pnpm"
