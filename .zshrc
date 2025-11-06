@@ -54,6 +54,11 @@ alias ......="cd ../../../../.."
 #Shortcuts
 alias r40="rustyvibes ~/Developer/Soundpacks\ 2/cherrymx-black-abs -v 40"
 
+# Auto-start Aerospace if not already running
+if ! pgrep -x "aerospace" >/dev/null; then
+  echo "🚀 Starting Aerospace..."
+  aerospace run &
+fi
 
 # pnpm
 export PNPM_HOME="/Users/shivraj/Library/pnpm"
@@ -97,9 +102,10 @@ unset __conda_setup
 clear
 fastfetch
 
-# AsyncAPI CLI Autocomplete
 
-ASYNCAPI_AC_ZSH_SETUP_PATH=/Users/shivraj/Library/Caches/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
 
 
 export PATH="/opt/homebrew/opt/mysql@8.0/bin:$PATH"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
