@@ -2,6 +2,7 @@
 	name = Shivraj
 	email = shivrajsoni09022005@gmail.com
   signkey = shivrajsoni09022005@gmail.com
+	signingkey = FB6F60EAB9E58AF7
 [pull]
 	rebase = true
 	default = current
@@ -40,3 +41,5 @@
 ;   gpgsign = true
 ; [tag]
 ;   gpgSign = true
+[commit]
+	gpgsign = true

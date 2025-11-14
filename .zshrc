@@ -104,3 +104,4 @@ export PATH="/opt/homebrew/opt/mysql@8.0/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+export GPG_TTY=/dev/ttys002
