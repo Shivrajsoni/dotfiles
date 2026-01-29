@@ -1,0 +1,6 @@
+# Neovim/Vim runtime state (not config — do not version)
+sessions/
+undodir/
+
+# macOS
+.DS_Store

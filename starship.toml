@@ -6,11 +6,13 @@ add_newline = true
 
 command_timeout = 5000
 
+# Move the directory to the second line; extra $line_break adds gap
+format = '$all$line_break$directory$character'
+# Time on the right (fill pushes it to the right edge)
+right_format = '$fill$time'
+
 [package]
 disabled = true
-
-# Move the directory to the second line
-format = '$all$directory$character'
 
 [character]
 error_symbol = "[❯](bold red)"
@@ -53,6 +55,13 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 [git_status]
 format = '([$all_status$ahead_behind]($style) )'
+
+# Time (shown on right via right_format)
+[time]
+disabled = false
+format = '[ $time ]($style)'
+time_format = '%H:%M'
+style = 'bold white'
 
 [aws]
 symbol = "  "
