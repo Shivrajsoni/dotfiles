@@ -11,7 +11,9 @@ export BLUE=0xff8aadf4
 export YELLOW=0xffeed49f
 export ORANGE=0xfff5a97f
 export MAGENTA=0xffc6a0f6
+export CYAN=0xff89b4fa
 export GRAY=0xff939ab7
+export COMMENT=$GRAY
 export TRANSPARENT=0x00000000
 
 # General bar colors
@@ -30,16 +32,16 @@ export SPOTIFY_GREEN=$GREEN
 
 # Bar
 export BAR_HEIGHT=30
-export BAR_CORNER_RADIUS=2
+export BAR_CORNER_RADIUS=8
 export BAR_Y_OFFSET=6 
 export BAR_MARGIN=7
 export BAR_BLUR=30
 
 # Borders
-export BORDER_WIDTH=2
+export BORDER_WIDTH=1
 
 # Shadows
-export SHADOW=on
+export SHADOW=off
 
 # Paddings
 export PADDINGS=4
