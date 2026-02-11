@@ -119,3 +119,5 @@ pip3()    { _pyenv_lazy_load; command pip3 "$@"; }
 
 fpath=(~/.zsh/completions $fpath)
 autoload -U compinit && compinit
+# Custom path for tmux-sessionx generated files\n
+export SESH_FILE_PATH="$HOME/.local/share/sesh/_sesh"

@@ -1,50 +1,53 @@
 #!/usr/bin/env sh
 
-#Color Palette
-#Tokyonight Night
-BLACK=0xff24283b
-WHITE=0xffa9b1d6
-MAGENTA=0xffbb9af7
-BLUE=0xff7aa2f7
-CYAN=0xff7dcfff
-GREEN=0xff9ece6a
-YELLOW=0xffe0af68
-ORANGE=0xffff9e64
-RED=0xfff7768e
-BAR_COLOR=0xaf14161D
-COMMENT=0xff565f89
+# —————————— Catppuccin Mocha Theme ——————————
+# https://github.com/catppuccin/catppuccin
 
-# Tokyonight Day
-#BLACK=0xffe9e9ed
-#WHITE=0xff3760bf
-#MAGENTA=0xff9854f1
-#BLUE=0xff2e7de9
-#CYAN=0xff007197
-#GREEN=0xff587539
-#YELLOW=0xff8c6c3e
-#ORANGE=0xffb15c00
-#RED=0xfff52a65
-#BAR_COLOR=0xffe1e2e7
-
-TRANSPARENT=0x00000000
+export BLACK=0xff181926
+export WHITE=0xffcad3f5
+export RED=0xffed8796
+export GREEN=0xffa6da95
+export BLUE=0xff8aadf4
+export YELLOW=0xffeed49f
+export ORANGE=0xfff5a97f
+export MAGENTA=0xffc6a0f6
+export GRAY=0xff939ab7
+export TRANSPARENT=0x00000000
 
 # General bar colors
-ICON_COLOR=$WHITE  # Color of all icons
-LABEL_COLOR=$WHITE # Color of all labels
+export BAR_COLOR=0xcc1e1e2e # Bar color with transparency
+export ICON_COLOR=$WHITE # Color of all icons
+export LABEL_COLOR=$WHITE # Color of all labels
+export SHADOW_COLOR=$BLACK
 
-ITEM_DIR="$SKETCHYBAR_CONFIG_DIR/items"
-PLUGIN_DIR="$SKETCHYBAR_CONFIG_DIR/plugins"
+# Item-specific colors
+export POPUP_BACKGROUND_COLOR=$BLACK
+export POPUP_BORDER_COLOR=$BLUE
 
-FONT="JetBrainsMono Nerd Font"
+export SPOTIFY_GREEN=$GREEN
 
-PADDINGS=3
+# —————————— Bar Style ——————————
 
-POPUP_BORDER_WIDTH=2
-POPUP_CORNER_RADIUS=11
-POPUP_BACKGROUND_COLOR=0xff565f89
-POPUP_BORDER_COLOR=$COMMENT
+# Bar
+export BAR_HEIGHT=30
+export BAR_CORNER_RADIUS=2
+export BAR_Y_OFFSET=6 
+export BAR_MARGIN=7
+export BAR_BLUR=30
 
-CORNER_RADIUS=10
-BORDER_WIDTH=2
+# Borders
+export BORDER_WIDTH=2
 
-SHADOW=on
+# Shadows
+export SHADOW=on
+
+# Paddings
+export PADDINGS=4
+
+# Font
+export FONT="JetBrainsMono Nerd Font"
+
+# —————————— Directories ——————————
+
+export ITEM_DIR="$SKETCHYBAR_CONFIG_DIR/items"
+export PLUGIN_DIR="$SKETCHYBAR_CONFIG_DIR/plugins"

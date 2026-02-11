@@ -1,120 +1,184 @@
 # AeroSpace config — i3-like tiling on macOS
 # Docs: https://nikitabobko.github.io/AeroSpace/guide
+#
+# This config is based on best practices from the AeroSpace community.
+# It includes a dedicated resize mode and other improvements.
+#
+# NOTE: Some features like [theme] and [workspace-names] are not supported
+# in your current AeroSpace version (0.19.2-Beta).
+# Consider updating AeroSpace to get the latest features.
 
-# Start at login (disable if you prefer to start manually)
+# ——— General Settings ———
 start-at-login = true
-
-# Run sketchybar after AeroSpace starts
-after-startup-command = ['exec-and-forget sketchybar']
-
-# Notify Sketchybar on workspace change (for bar integration)
-exec-on-workspace-change = ['/bin/bash', '-c',
-  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
-  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=0'
-]
-
-# Layout
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
 accordion-padding = 0
+after-startup-command = ['exec-and-forget sketchybar']
+exec-on-workspace-change = ['/bin/bash', '-c', 'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE']
 
-# Mouse follows focus when you switch monitors
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-
-# Normalization (recommended): flatten single-child containers, opposite orientation for nested
-enable-normalization-flatten-containers = true
-enable-normalization-opposite-orientation-for-nested-containers = true
-
-# Gaps: zero so all windows fit to the screen (edge-to-edge)
-# Must come after other top-level keys so they are not parsed under [gaps]
+# ——— Gaps ———
+# Gaps between windows (inner) and between windows and the screen edge (outer).
+# Set to 0 to disable gaps.
 [gaps]
-inner.horizontal = 0
-inner.vertical = 0
-outer.left = 0
-outer.right = 0
-outer.top = 0
-outer.bottom = 0
+inner.horizontal = 10
+inner.vertical = 10
+outer.left = 10
+outer.right = 10
+outer.top = 10
+outer.bottom = 10
 
-# ——— Key bindings (main mode) ———
+# ——— Key Bindings ———
+
+# The main mode is for everyday window management.
 [mode.main.binding]
 
-# Focus (vim-style hjkl)
+# --- Focus & Move ---
+# Focus windows using vim-style keys.
 alt-h = 'focus left'
 alt-j = 'focus down'
 alt-k = 'focus up'
 alt-l = 'focus right'
 
-# Focus / workspace back-and-forth
-alt-backtick = 'focus-back-and-forth'
-alt-tab = 'workspace-back-and-forth'
-
-# Move windows
+# Move windows using vim-style keys.
 alt-shift-h = 'move left'
 alt-shift-j = 'move down'
 alt-shift-k = 'move up'
 alt-shift-l = 'move right'
 
-# Resize
-alt-shift-minus = 'resize smart -50'
-alt-shift-equal = 'resize smart +50'
-
-# Balance window sizes in current workspace
-alt-b = 'balance-sizes'
-
-# Swap focused window with neighbor (swap positions)
-alt-shift-s = 'swap dfs-next --swap-focus'
-
-# Layout toggles
-alt-slash = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
-alt-s = 'layout v_accordion'
-alt-w = 'layout h_accordion'
-alt-e = 'layout tiles'
-alt-f = 'fullscreen'
+# --- Layouts ---
+# Toggle between tiling and floating for the focused window.
 alt-shift-space = 'layout floating tiling'
 
-# Workspaces
+# Toggle between different tiling layouts.
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion'
+
+# Fullscreen the focused window.
+alt-f = 'fullscreen'
+
+# Balance the sizes of all windows in the current workspace.
+alt-b = 'balance-sizes'
+
+# --- Workspaces ---
+# Switch to a workspace by number.
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
 alt-4 = 'workspace 4'
 alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
 
-# Move window to workspace and follow (move + switch)
-alt-shift-1 = ['move-node-to-workspace --focus-follows-window 1']
-alt-shift-2 = ['move-node-to-workspace --focus-follows-window 2']
-alt-shift-3 = ['move-node-to-workspace --focus-follows-window 3']
-alt-shift-4 = ['move-node-to-workspace --focus-follows-window 4']
-alt-shift-5 = ['move-node-to-workspace --focus-follows-window 5']
+# Move focused window to a workspace (and stay on the current workspace).
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
 
-# Move workspace to next/prev monitor
+# Move focused window to a workspace (and follow the window).
+alt-ctrl-1 = 'move-node-to-workspace --focus-follows-window 1'
+alt-ctrl-2 = 'move-node-to-workspace --focus-follows-window 2'
+alt-ctrl-3 = 'move-node-to-workspace --focus-follows-window 3'
+alt-ctrl-4 = 'move-node-to-workspace --focus-follows-window 4'
+alt-ctrl-5 = 'move-node-to-workspace --focus-follows-window 5'
+alt-ctrl-6 = 'move-node-to-workspace --focus-follows-window 6'
+alt-ctrl-7 = 'move-node-to-workspace --focus-follows-window 7'
+alt-ctrl-8 = 'move-node-to-workspace --focus-follows-window 8'
+alt-ctrl-9 = 'move-node-to-workspace --focus-follows-window 9'
+
+
+# --- Workspace & Monitor Management ---
+# Switch to the previous workspace.
+alt-tab = 'workspace-back-and-forth'
+
+# Move workspace to the next/previous monitor.
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-# Window / app (quit via menu or tray — 'quit' not in this AeroSpace version)
+# --- System & AeroSpace ---
+# Close the focused window.
 alt-shift-q = 'close'
+
+# Reload AeroSpace configuration.
 alt-shift-r = 'reload-config'
 
-# Service mode (layout reset, float toggle, join-with, close others)
+# --- Modes ---
+# Enter service mode for more advanced commands.
 alt-shift-semicolon = 'mode service'
 
-# ——— Service mode (alt-shift-;) ———
+# Enter resize mode.
+alt-r = 'mode resize'
+
+
+# The resize mode allows you to resize windows with vim-style keys.
+[mode.resize.binding]
+h = 'resize width -50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width +50'
+
+# Press escape to return to the main mode.
+esc = 'mode main'
+enter = 'mode main'
+
+
+# The service mode provides commands for more complex layout manipulations.
 [mode.service.binding]
-esc = ['mode main']
+# Flatten the layout tree (useful if you get into a weird state).
 r = ['flatten-workspace-tree', 'mode main']
+
+# Toggle floating for the focused window.
 f = ['layout floating tiling', 'mode main']
+
+# Close all windows in the workspace except the focused one.
 backspace = ['close-all-windows-but-current', 'mode main']
+
+# Join the focused window with another window.
 alt-shift-h = ['join-with left', 'mode main']
 alt-shift-j = ['join-with down', 'mode main']
 alt-shift-k = ['join-with up', 'mode main']
 alt-shift-l = ['join-with right', 'mode main']
 
-# ——— Apps that should float (dialogs, system tools) ———
+# Press escape to return to the main mode.
+esc = ['mode main']
+enter = 'mode main'
+
+# ——— Window Detection Rules ———
+#
+# Rules for automatically managing windows when they are created.
+# Use `aerospace list-apps` to find the app-id of an application.
+
+# --- Tiling Windows ---
+# Force tiling for browsers that might default to floating.
 [[on-window-detected]]
-if.app-id = 'com.apple.finder'
-run = ['layout floating']
+if.app-id = 'com.brave.Browser'
+run = ['layout tiling']
 
 [[on-window-detected]]
-if.app-id = 'com.apple.ActivityMonitor'
+if.app-id = 'com.google.Chrome'
+run = ['layout tiling']
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+run = ['layout tiling']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = ['layout tiling']
+
+
+# --- Floating Windows ---
+# Make these applications float by default.
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
 run = ['layout floating']
 
 [[on-window-detected]]
@@ -122,7 +186,15 @@ if.app-id = 'com.apple.systempreferences'
 run = ['layout floating']
 
 [[on-window-detected]]
+if.app-id = 'com.apple.SystemSettings'
+run = ['layout floating']
+
+[[on-window-detected]]
 if.app-id = 'com.apple.calculator'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ActivityMonitor'
 run = ['layout floating']
 
 [[on-window-detected]]
@@ -133,6 +205,6 @@ run = ['layout floating']
 if.app-id = 'org.pqrs.karabiner.Karabiner-Elements'
 run = ['layout floating']
 
-# ——— Multi-monitor: workspace 1 on main ———
-[workspace-to-monitor-force-assignment]
-1 = 'main'
+[[on-window-detected]]
+if.app-id = 'com.raycast.macos'
+run = ['layout floating']
