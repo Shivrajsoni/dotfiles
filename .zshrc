@@ -12,7 +12,7 @@ export PATH="$HOME/.yarn/bin:$(yarn global bin):$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
 
 export PATH="$HOME/.cargo/bin:$PATH"
-
+export PATH="$HOME/.local/bin:$PATH"
 
 # Replace ls with eza
 alias ls='eza --icons '
@@ -121,3 +121,6 @@ fpath=(~/.zsh/completions $fpath)
 autoload -U compinit && compinit
 # Custom path for tmux-sessionx generated files\n
 export SESH_FILE_PATH="$HOME/.local/share/sesh/_sesh"
+
+# opencode
+export PATH=/Users/shivraj/.opencode/bin:$PATH
