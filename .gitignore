@@ -4,3 +4,5 @@ undodir/
 
 # macOS
 .DS_Store
+
+# sketchybar todo lives in $HOME/.sketchybar_todo (not in repo)

@@ -27,9 +27,11 @@ sketchybar --bar height=$BAR_HEIGHT \
   popup.background.color=$POPUP_BACKGROUND_COLOR \
   popup.background.shadow.drawing=$SHADOW
 
-# Left side
+# Left side (spaces, front_app, then todo in the empty portion)
+sketchybar --add event todo_update
 source "$ITEM_DIR/spaces.sh"
 source "$ITEM_DIR/front_app.sh"
+source "$ITEM_DIR/todo.sh"
 
 # Right side
 source "$ITEM_DIR/clock.sh"
@@ -40,6 +42,7 @@ source "$ITEM_DIR/cpu.sh"
 #################### Finalizing Setup ####################
 
 sketchybar --hotload true
+sketchybar --trigger todo_update
 sketchybar --update
 
 echo "sketchybar configuration loaded.."

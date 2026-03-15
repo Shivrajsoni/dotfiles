@@ -130,3 +130,7 @@ export SESH_FILE_PATH="$HOME/.local/share/sesh/_sesh"
 
 # opencode
 export PATH=/Users/shivraj/.opencode/bin:$PATH
+export PATH="$PATH:/Users/shivraj/dotfiles/sketchybar"
+
+# sketchybar: single todo in bar (todo "desc", todo -c, todo -l)
+todo() { "${DOTFILES:-$HOME/dotfiles}/sketchybar/todo.command" "$@"; }
