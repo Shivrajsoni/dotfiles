@@ -14,9 +14,11 @@
 
   "modules": [
     {
-      "type": "title",
-      "format": "  {#}{$1} {#}{user-name}@{host-name}",
-      "key": "",
+      "type": "command",
+      "key": " ",
+      "format": "{result}",
+      "parallel": false,
+      "text": "cols=$(tput cols 2>/dev/null || echo 80); user=$(whoami); host=$(hostname); hour=$(date +%-H); min=$(date +%-M); total=$((hour*60+min)); pct=$((total*100/1440)); filled=$((pct*24/100)); [ $filled -gt 24 ] && filled=24; left=\"  ${user}@${host}\"; bar=\"\"; for i in $(seq 1 24); do if [ $i -le $filled ]; then bar=\"${bar}\u2588\"; else bar=\"${bar}\u2591\"; fi; done; time_str=$(printf '%02d:%02d' $hour $min); right_plain=\"    [${bar}]  ${pct}%  ${time_str}\"; right_len=${#right_plain}; left_len=${#left}; pad=$((cols - left_len - right_len)); [ $pad -lt 0 ] && pad=0; printf '%s%*s%s\\n' \"$left\" $pad '' \"$right_plain\"",
     },
     {
       "type": "custom",

@@ -1,3 +1,9 @@
+# Starship: Nerd Font symbols in WezTerm/default terminal, plain symbols in Cursor/IDE
+if [[ "$TERM_PROGRAM" == "vscode" || "$TERM_PROGRAM" == "Cursor" ]]; then
+  export STARSHIP_CONFIG="${DOTFILES:-$HOME/dotfiles}/starship-no-nerd.toml"
+else
+  export STARSHIP_CONFIG="${DOTFILES:-$HOME/dotfiles}/starship-nerd.toml"
+fi
 eval "$(starship init zsh)"
 
 eval "$(zoxide init zsh)"
@@ -91,8 +97,8 @@ conda() {
 }
 
 
-# Show fastfetch only in interactive shells (config: random wallpaper logo from ~/Developer/wallpaper/terminal-wallpaper)
-if [[ -o interactive ]]; then
+# Show fastfetch only in interactive shells, and only in WezTerm or default terminal (not in Cursor/VS Code/IDE)
+if [[ -o interactive ]] && [[ "$TERM_PROGRAM" != "vscode" && "$TERM_PROGRAM" != "Cursor" ]]; then
   clear && fastfetch -c "$HOME/dotfiles/fastfetch/config.jsonc" 2>/dev/null || true
 fi
 
