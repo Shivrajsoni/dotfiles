@@ -64,6 +64,7 @@ time_format = '%H:%M'
 style = 'bold white'
 
 [aws]
+disabled=true
 symbol = "☁ "
 
 [buf]
