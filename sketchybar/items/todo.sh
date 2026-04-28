@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Left side: after front_app, in the empty portion of the bar.
+# Center side: after front_app
 sketchybar --add item todo left \
   --set todo script="$PLUGIN_DIR/todo.sh" \
   updates=on \
@@ -14,11 +14,6 @@ sketchybar --add item todo left \
   label.drawing=on \
   label.padding_left=4 \
   label.padding_right=10 \
-  background.height=26 \
-  background.color=0x00000000 \
-  background.border_color=$COMMENT \
-  background.border_width=1 \
-  background.corner_radius=$CORNER_RADIUS \
   background.padding_left=12 \
   background.padding_right=10 \
   associated_display=active \

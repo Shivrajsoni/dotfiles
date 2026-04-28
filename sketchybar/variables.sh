@@ -16,8 +16,14 @@ export GRAY=0xff939ab7
 export COMMENT=$GRAY
 export TRANSPARENT=0x00000000
 
+export BASE=0xff1e1e2e
+export SURFACE0=0xff313244
+export SURFACE1=0xff45475a
+export SURFACE2=0xff585b70
+export OVERLAY0=0xff6c7086
+
 # General bar colors
-export BAR_COLOR=0xcc1e1e2e # Bar color with transparency
+export BAR_COLOR=$TRANSPARENT
 export ICON_COLOR=$WHITE # Color of all icons
 export LABEL_COLOR=$WHITE # Color of all labels
 export SHADOW_COLOR=$BLACK
@@ -31,20 +37,24 @@ export SPOTIFY_GREEN=$GREEN
 # —————————— Bar Style ——————————
 
 # Bar
-export BAR_HEIGHT=30
-export BAR_CORNER_RADIUS=8
-export BAR_Y_OFFSET=6 
-export BAR_MARGIN=7
-export BAR_BLUR=30
+export BAR_HEIGHT=40
+export BAR_CORNER_RADIUS=0
+export BAR_Y_OFFSET=4
+export BAR_MARGIN=10
+export BAR_BLUR=40
+
+# Item specific
+export ITEM_CORNER_RADIUS=12
+export ITEM_HEIGHT=28
 
 # Borders
 export BORDER_WIDTH=1
 
 # Shadows
-export SHADOW=off
+export SHADOW=on
 
 # Paddings
-export PADDINGS=4
+export PADDINGS=6
 
 # Font
 export FONT="JetBrainsMono Nerd Font"
