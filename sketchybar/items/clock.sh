@@ -3,7 +3,7 @@
 COLOR="$MAGENTA"
 
 sketchybar --add item clock right \
-  --set clock update_freq=1 \
+  --set clock update_freq=10 \
   updates=on \
   icon.color="$COLOR" \
   icon="" \

@@ -1,7 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-SURFACE1="${SURFACE1:-0xff45475a}"
-SURFACE0="${SURFACE0:-0xff313244}"
+source "$HOME/dotfiles/sketchybar/variables.sh"
 
 case "$SENDER" in
   "mouse.entered")
@@ -14,10 +13,11 @@ case "$SENDER" in
     open "x-apple.systempreferences:com.apple.preference.battery"
     ;;
   *)
-    PERCENTAGE="$(pmset -g batt | grep -Eo "\d+%" | cut -d% -f1)"
-    CHARGING="$(pmset -g batt | grep 'AC Power')"
+    BATT_INFO="$(pmset -g batt)"
+    PERCENTAGE="$(echo "$BATT_INFO" | grep -Eo "\d+%" | cut -d% -f1)"
+    CHARGING="$(echo "$BATT_INFO" | grep 'AC Power')"
 
-    if [ "$PERCENTAGE" = "" ]; then
+    if [ -z "$PERCENTAGE" ]; then
       exit 0
     fi
 

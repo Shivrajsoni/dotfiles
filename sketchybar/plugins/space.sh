@@ -1,15 +1,11 @@
 #!/usr/bin/env bash
 # Aerospace workspace indicator: highlight focused space, switch on click.
-# Robust: no external source, derive SID from NAME, fallback colors if env missing.
+# Robust: derive SID from NAME.
+
+source "$HOME/dotfiles/sketchybar/variables.sh"
 
 NAME="${NAME:?}"
 SID="${NAME#space.}"
-# Fallback colors when variables.sh not loaded
-MAGENTA="${MAGENTA:-0xffc6a0f6}"
-SURFACE0="${SURFACE0:-0xff313244}"
-SURFACE1="${SURFACE1:-0xff45475a}"
-BASE="${BASE:-0xff1e1e2e}"
-WHITE="${WHITE:-0xffcad3f5}"
 AEROSPACE_PATH="${AEROSPACE_PATH:-/opt/homebrew/bin/aerospace}"
 
 if [ "$SENDER" = "aerospace_workspace_change" ]; then

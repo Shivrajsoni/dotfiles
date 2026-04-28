@@ -6,8 +6,9 @@ if [ -z "$NAME" ]; then
   exit 1
 fi
 
-# Get CPU usage
-CPU_PERCENTAGE=$(top -l 1 | awk -F'[ ,%]+' '/CPU usage/ {print int($3 + $5)}')
+# Get CPU usage efficiently using ps
+CORES=$(sysctl -n hw.logicalcpu)
+CPU_PERCENTAGE=$(ps -A -o %cpu | awk -v cores="$CORES" '{s+=$1} END {printf "%d\n", s/cores}')
 
 # Send to sketchybar
 sketchybar --set "$NAME" label="${CPU_PERCENTAGE}%"

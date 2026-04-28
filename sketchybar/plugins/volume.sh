@@ -1,7 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-SURFACE1="${SURFACE1:-0xff45475a}"
-SURFACE0="${SURFACE0:-0xff313244}"
+source "$HOME/dotfiles/sketchybar/variables.sh"
 
 case "$SENDER" in
   "mouse.entered")
@@ -17,8 +16,9 @@ case "$SENDER" in
     osascript -e 'set volume output volume (output volume of (get volume settings) - 5)'
     ;;
   *)
-    VOLUME=$(osascript -e 'output volume of (get volume settings)')
-    MUTED=$(osascript -e 'output muted of (get volume settings)')
+    VOL_INFO=$(osascript -e 'set vol to get volume settings' -e 'return (output volume of vol as string) & "," & (output muted of vol as string)')
+    VOLUME=$(echo "$VOL_INFO" | cut -d',' -f1)
+    MUTED=$(echo "$VOL_INFO" | cut -d',' -f2)
 
     if [ "$MUTED" = "true" ]; then
       ICON="󰖁" # Speaker muted

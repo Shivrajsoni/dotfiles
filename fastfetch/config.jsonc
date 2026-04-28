@@ -1,124 +1,84 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
-
-  // Background + opacity: use WezTerm background (same wallpaper dir, opacity in wezterm.lua). Logo off so image isn't shown twice.
   "logo": {
-    "type": "none",
+    "type": "builtin",
+    "source": "macos2",
+    "color": {
+      "1": "magenta",
+      "2": "cyan"
+    },
+    "padding": {
+      "top": 2,
+      "right": 4,
+      "left": 2
+    }
   },
-
   "display": {
     "separator": "  ",
-    "constants": ["───────────"],
-    "brightColor": false,
+    "constants": []
   },
-
   "modules": [
+    "break",
     {
-      "type": "command",
-      "key": " ",
-      "format": "{result}",
-      "parallel": false,
-      "text": "echo \"  $(whoami)@$(hostname)\"",
+      "type": "title",
+      "color": {
+        "user": "magenta",
+        "at": "white",
+        "host": "cyan"
+      }
     },
-    {
-      "type": "custom",
-      "format": "  {#}│ {#6}System Information{#}",
-    },
+    "break",
     {
       "type": "os",
-      "key": "  {#}│  {#keys}󰍹 OS",
-      "keyColor": "cyan",
+      "key": "os    ",
+      "keyColor": "blue"
     },
     {
       "type": "kernel",
-      "key": "  {#}│  {#keys}󰒋 Kernel",
-      "keyColor": "cyan",
+      "key": "kernel",
+      "keyColor": "blue"
     },
     {
       "type": "uptime",
-      "key": "  {#}│  {#keys}󰅐 Uptime",
-      "keyColor": "cyan",
+      "key": "uptime",
+      "keyColor": "blue"
     },
     {
       "type": "packages",
-      "key": "  {#}│  {#keys}󰏖 Packages",
-      "keyColor": "cyan",
-      "format": "{all}",
-    },
-    {
-      "type": "custom",
-      "format": "  {#}│",
-    },
-    {
-      "type": "custom",
-      "format": "  {#}│ {#3}Desktop Environment{#}",
-    },
-    {
-      "type": "de",
-      "key": "  {#}│  {#keys}󰧨 DE",
-      "keyColor": "yellow",
-    },
-    {
-      "type": "wm",
-      "key": "  {#}│  {#keys}󱂬 WM",
-      "keyColor": "yellow",
-    },
-    {
-      "type": "wmtheme",
-      "key": "  {#}│  {#keys}󰉼 Theme",
-      "keyColor": "yellow",
-    },
-    {
-      "type": "display",
-      "key": "  {#}│  {#keys}󰹑 Resolution",
-      "keyColor": "yellow",
+      "key": "pkgs  ",
+      "keyColor": "blue"
     },
     {
       "type": "shell",
-      "key": "  {#}│  {#keys}󰞷 Shell",
-      "keyColor": "yellow",
+      "key": "shell ",
+      "keyColor": "blue"
     },
     {
-      "type": "terminalfont",
-      "key": "  {#}│  {#keys}󰛖 Font",
-      "keyColor": "yellow",
+      "type": "wm",
+      "key": "wm    ",
+      "keyColor": "blue"
     },
+    "break",
     {
-      "type": "custom",
-      "format": "  {#}│",
-    },
-    {
-      "type": "custom",
-      "format": "  {#}│ {#2}Hardware{#}",
+      "type": "disk",
+      "key": "disk  ",
+      "keyColor": "green",
+      "folders": "/"
     },
     {
       "type": "cpu",
-      "key": "  {#}│  {#keys}󰻠 CPU",
-      "keyColor": "green",
-    },
-    {
-      "type": "gpu",
-      "key": "  {#}│  {#keys}󰢮 GPU",
-      "keyColor": "green",
+      "key": "cpu   ",
+      "keyColor": "green"
     },
     {
       "type": "memory",
-      "key": "  {#}│  {#keys}󰍛 Memory",
-      "keyColor": "green",
+      "key": "mem   ",
+      "keyColor": "green"
     },
+    "break",
     {
-      "type": "swap",
-      "key": "  {#}│  {#keys}󰍛 Swap",
-      "keyColor": "green",
-    },
-    {
-      "type": "disk",
-      "key": "  {#}│  {#keys}󰋊 Disk",
-      "keyColor": "green",
-    },
-    {
-      "type": "custom",
-      "format": "  {#}╰{$1}╯",
-    },
-  ],
+      "type": "colors",
+      "symbol": "circle"
+    }
+  ]
 }

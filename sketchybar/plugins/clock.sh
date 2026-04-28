@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-SURFACE1="${SURFACE1:-0xff45475a}"
-SURFACE0="${SURFACE0:-0xff313244}"
+source "$HOME/dotfiles/sketchybar/variables.sh"
 
 case "$SENDER" in
   "mouse.entered")

@@ -1,9 +1,5 @@
-# Starship: Nerd Font symbols in WezTerm/default terminal, plain symbols in Cursor/IDE
-if [[ "$TERM_PROGRAM" == "vscode" || "$TERM_PROGRAM" == "Cursor" ]]; then
-  export STARSHIP_CONFIG="${DOTFILES:-$HOME/dotfiles}/starship-no-nerd.toml"
-else
-  export STARSHIP_CONFIG="${DOTFILES:-$HOME/dotfiles}/starship-nerd.toml"
-fi
+# Starship configuration
+export STARSHIP_CONFIG="${DOTFILES:-$HOME/dotfiles}/starship.toml"
 eval "$(starship init zsh)"
 
 eval "$(zoxide init zsh)"
@@ -11,20 +7,17 @@ eval "$(zoxide init zsh)"
 eval "$(rbenv init - zsh)"
 alias cd='z'
 
-# Yarn global bin
-export PATH="$HOME/.yarn/bin:$(yarn global bin):$PATH"
-
-#making gcc by default
-export PATH="/opt/homebrew/bin:$PATH"
-
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+# Core PATH configurations
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/opt/homebrew/bin:$HOME/.yarn/bin:$(yarn global bin 2>/dev/null || echo ""):$PATH"
 
 # Replace ls with eza
 alias ls='eza --icons '
 alias ll='eza -lah --icons'  # Long format, human-readable, hidden files
 alias lt='eza -T --icons'  # Tree view
 alias lg='eza -l --git --icons'  # Show git status
+
+# Replace cat with bat
+alias cat='bat'
 
 #git
 alias gst="git status"
@@ -129,8 +122,7 @@ autoload -U compinit && compinit
 export SESH_FILE_PATH="$HOME/.local/share/sesh/_sesh"
 
 # opencode
-export PATH=/Users/shivraj/.opencode/bin:$PATH
-export PATH="$PATH:/Users/shivraj/dotfiles/sketchybar"
+export PATH="/Users/shivraj/.opencode/bin:$PATH"
 
 # sketchybar: single todo in bar (todo "desc", todo -c, todo -l)
 todo() { "${DOTFILES:-$HOME/dotfiles}/sketchybar/todo.command" "$@"; }

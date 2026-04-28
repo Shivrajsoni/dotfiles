@@ -17,19 +17,12 @@ case "$1" in
     ;;
   -c)
     : > "$TODO_FILE"
-    sketchybar --set todo label="—"
     sketchybar --trigger todo_update
-    sketchybar --update
     echo "Todo cleared"
     ;;
   *)
     printf '%s\n' "$1" > "$TODO_FILE"
-    desc="$1"
-    [ ${#desc} -gt 40 ] && desc="${desc:0:37}..."
-    desc="${desc//\"/\\\"}"
-    sketchybar --set todo label="$desc"
     sketchybar --trigger todo_update
-    sketchybar --update
     echo "Todo set: $1"
     ;;
 esac
