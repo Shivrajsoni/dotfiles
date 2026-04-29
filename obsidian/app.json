@@ -1,8 +1,18 @@
 {
   "promptDelete": true,
   "alwaysUpdateLinks": true,
-  "attachmentFolderPath": "./+",
-  "showLineNumber": false,
+  "attachmentFolderPath": "./attachments",
+  "showLineNumber": true,
   "newFileLocation": "current",
-  "showUnsupportedFiles": true
+  "showUnsupportedFiles": true,
+  "useMarkdownLinks": false,
+  "strictLineBreaks": false,
+  "livePreview": true,
+  "vimMode": true,
+  "spellcheck": true,
+  "readableLineLength": true,
+  "foldHeading": true,
+  "foldIndent": true,
+  "autoConvertHtml": true,
+  "showFrontmatter": true
 }

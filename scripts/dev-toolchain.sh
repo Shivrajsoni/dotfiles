@@ -71,13 +71,15 @@ if [ "$OS_TYPE" = "Mac" ]; then
     fi
     log_done "C++ build tools (Xcode CLI) ready"
 elif [ "$OS_TYPE" = "Linux" ]; then
+    SUDO=""
+    [ "$(id -u)" -ne 0 ] && SUDO="sudo"
     if command -v apt &>/dev/null; then
-        sudo apt install -y build-essential gcc g++ make cmake
+        $SUDO apt install -y build-essential gcc g++ make cmake
     elif command -v pacman &>/dev/null; then
-        sudo pacman -S --noconfirm base-devel gcc make cmake
+        $SUDO pacman -S --noconfirm base-devel gcc make cmake
     elif command -v dnf &>/dev/null; then
-        sudo dnf groupinstall -y "Development Tools"
-        sudo dnf install -y gcc-c++ make cmake
+        $SUDO dnf groupinstall -y "Development Tools"
+        $SUDO dnf install -y gcc-c++ make cmake
     fi
     log_done "C++ build tools ready"
 fi

@@ -13,7 +13,9 @@ Detects macOS / Linux, installs packages, sets up dev tools (Node, Bun, Python, 
 ```
 ├── bootstrap.sh           # setup entry point
 ├── Brewfile               # macOS packages
-├── .zshrc / .tmux.conf    # shell & multiplexer
+├── .zshrc                 # zsh config (macOS)
+├── .bashrc                # bash config (Linux)
+├── .tmux.conf             # multiplexer
 ├── starship.toml          # prompt
 ├── wezterm/               # terminal emulator
 ├── fastfetch/             # system info

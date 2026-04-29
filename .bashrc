@@ -1,49 +1,35 @@
 # ── PATH ────────────────────────────────────────────────────────────
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-[ -d "/opt/homebrew/bin" ] && export PATH="/opt/homebrew/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 [ -d "$BUN_INSTALL/bin" ] && export PATH="$BUN_INSTALL/bin:$PATH"
 
 # ── Aliases ─────────────────────────────────────────────────────────
-command -v eza &>/dev/null && alias ls='eza --icons' && alias ll='eza -lah --icons' && alias lt='eza -T --icons'
-command -v bat &>/dev/null && alias cat='bat'
+command -v eza >/dev/null 2>&1 && alias ls='eza --icons' && alias ll='eza -lah --icons' && alias lt='eza -T --icons'
+command -v bat >/dev/null 2>&1 && alias cat='bat'
 alias gst="git status" gca="git commit -a -m" gp="git push origin HEAD" gdiff="git diff" gadd="git add"
 alias ..='cd ..' ...='cd ../..' ....='cd ../../..'
-command -v kubectl &>/dev/null && alias k='kubectl'
+command -v kubectl >/dev/null 2>&1 && alias k='kubectl'
 
 # ── Starship ────────────────────────────────────────────────────────
 export STARSHIP_CONFIG="${DOTFILES:-$HOME/dotfiles}/starship.toml"
-command -v starship &>/dev/null && eval "$(starship init zsh)"
+command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
 
 # ── Zoxide ──────────────────────────────────────────────────────────
-command -v zoxide &>/dev/null && eval "$(zoxide init zsh)" && alias cd='z'
-
-# ── Bun completions ────────────────────────────────────────────────
-[ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init bash)" && alias cd='z'
 
 # ── NVM (lazy-loaded) ──────────────────────────────────────────────
 export NVM_DIR="$HOME/.nvm"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
-  _nvm_lazy_load() { unfunction nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; }
-  nvm()  { _nvm_lazy_load; nvm "$@"; }
-  node() { _nvm_lazy_load; command node "$@"; }
-  npm()  { _nvm_lazy_load; command npm "$@"; }
-  npx()  { _nvm_lazy_load; command npx "$@"; }
+  nvm()  { unset -f nvm node npm npx; . "$NVM_DIR/nvm.sh"; nvm "$@"; }
+  node() { unset -f nvm node npm npx; . "$NVM_DIR/nvm.sh"; command node "$@"; }
+  npm()  { unset -f nvm node npm npx; . "$NVM_DIR/nvm.sh"; command npm "$@"; }
+  npx()  { unset -f nvm node npm npx; . "$NVM_DIR/nvm.sh"; command npx "$@"; }
 fi
 
 # ── GPG ─────────────────────────────────────────────────────────────
-[[ -t 0 ]] && export GPG_TTY=$(tty 2>/dev/null)
+[ -t 0 ] && export GPG_TTY=$(tty 2>/dev/null)
 
 # ── Fastfetch (skip in IDEs) ───────────────────────────────────────
-if [[ -o interactive ]] && [[ "$TERM_PROGRAM" != "vscode" && "$TERM_PROGRAM" != "Cursor" ]]; then
+if [[ $- == *i* ]] && [[ "$TERM_PROGRAM" != "vscode" && "$TERM_PROGRAM" != "Cursor" ]]; then
   clear && fastfetch -c "${DOTFILES:-$HOME/dotfiles}/fastfetch/config.jsonc" 2>/dev/null || true
 fi
-
-# ── Completions (cached) ───────────────────────────────────────────
-autoload -Uz compinit
-ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump"
-[[ ! -f "$ZSH_COMPDUMP" ]] || [[ -n $(find "$ZSH_COMPDUMP" -mmin +1440 2>/dev/null) ]] && compinit -d "$ZSH_COMPDUMP" || compinit -C -d "$ZSH_COMPDUMP"
-
-# ── Misc ────────────────────────────────────────────────────────────
-export SESH_FILE_PATH="$HOME/.local/share/sesh/_sesh"
-[ -f "${DOTFILES:-$HOME/dotfiles}/sketchybar/todo.command" ] && todo() { "${DOTFILES:-$HOME/dotfiles}/sketchybar/todo.command" "$@"; }

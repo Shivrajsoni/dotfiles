@@ -86,6 +86,7 @@ log_info "Symlinking configurations..."
 # Format: "source_relative_path:destination_absolute_path"
 SYMLINKS=(
     ".zshrc:$HOME/.zshrc"
+    ".bashrc:$HOME/.bashrc"
     ".tmux.conf:$HOME/.tmux.conf"
     "starship.toml:$HOME/.config/starship.toml"
     "wezterm:$HOME/.config/wezterm"
@@ -140,9 +141,11 @@ fi
 ZSH_PATH="$(which zsh 2>/dev/null)"
 if [ -n "$ZSH_PATH" ] && [ "$SHELL" != "$ZSH_PATH" ]; then
     log_info "Setting default shell to zsh..."
+    SUDO=""
+    [ "$(id -u)" -ne 0 ] && SUDO="sudo"
     # Add zsh to /etc/shells if missing
     if ! grep -q "$ZSH_PATH" /etc/shells 2>/dev/null; then
-        run sudo sh -c "echo '$ZSH_PATH' >> /etc/shells"
+        run $SUDO sh -c "echo '$ZSH_PATH' >> /etc/shells"
     fi
     run chsh -s "$ZSH_PATH" || log_error "Failed to change shell. Run: chsh -s $ZSH_PATH"
 else

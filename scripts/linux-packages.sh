@@ -19,19 +19,23 @@ if [ "$(uname -s)" != "Linux" ]; then
     exit 0
 fi
 
+# ── Use sudo only if not root ───────────────────────────────────────
+SUDO=""
+[ "$(id -u)" -ne 0 ] && SUDO="sudo"
+
 # ── Detect package manager ──────────────────────────────────────────
 if command -v apt &>/dev/null; then
     PKG="apt"
-    INSTALL="sudo apt install -y"
-    UPDATE="sudo apt update"
+    INSTALL="$SUDO apt install -y"
+    UPDATE="$SUDO apt update"
 elif command -v pacman &>/dev/null; then
     PKG="pacman"
-    INSTALL="sudo pacman -S --noconfirm"
-    UPDATE="sudo pacman -Syu --noconfirm"
+    INSTALL="$SUDO pacman -S --noconfirm"
+    UPDATE="$SUDO pacman -Syu --noconfirm"
 elif command -v dnf &>/dev/null; then
     PKG="dnf"
-    INSTALL="sudo dnf install -y"
-    UPDATE="sudo dnf check-update || true"
+    INSTALL="$SUDO dnf install -y"
+    UPDATE="$SUDO dnf check-update || true"
 else
     log_err "No supported package manager found (need apt, pacman, or dnf)"
     exit 1
@@ -54,8 +58,8 @@ case "$PKG" in
         # bat is 'batcat' on Debian/Ubuntu, fd is 'fd-find'
         $INSTALL bat fd-find
         # Create symlinks for consistent names
-        [ ! -L /usr/local/bin/bat ] && sudo ln -sf "$(which batcat)" /usr/local/bin/bat 2>/dev/null || true
-        [ ! -L /usr/local/bin/fd ]  && sudo ln -sf "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
+        [ ! -L /usr/local/bin/bat ] && $SUDO ln -sf "$(which batcat)" /usr/local/bin/bat 2>/dev/null || true
+        [ ! -L /usr/local/bin/fd ]  && $SUDO ln -sf "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
         # eza: install from cargo if not in apt
         if ! command -v eza &>/dev/null; then
             if command -v cargo &>/dev/null; then
@@ -89,7 +93,7 @@ fi
 # Fastfetch
 if ! command -v fastfetch &>/dev/null; then
     case "$PKG" in
-        apt)    sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch 2>/dev/null && sudo apt update && $INSTALL fastfetch || log_info "Install fastfetch manually: https://github.com/fastfetch-cli/fastfetch" ;;
+        apt)    $SUDO add-apt-repository -y ppa:zhangsongcui3371/fastfetch 2>/dev/null && $SUDO apt update && $INSTALL fastfetch || log_info "Install fastfetch manually: https://github.com/fastfetch-cli/fastfetch" ;;
         pacman) $INSTALL fastfetch ;;
         dnf)    $INSTALL fastfetch ;;
     esac
