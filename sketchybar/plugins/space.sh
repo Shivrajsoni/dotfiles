@@ -2,7 +2,7 @@
 # Aerospace workspace indicator: highlight focused space, switch on click.
 # Robust: derive SID from NAME.
 
-source "$HOME/dotfiles/sketchybar/variables.sh"
+source "${SKETCHYBAR_CONFIG_DIR:-$HOME/dotfiles/sketchybar}/variables.sh"
 
 NAME="${NAME:?}"
 SID="${NAME#space.}"

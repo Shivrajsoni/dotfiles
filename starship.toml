@@ -9,7 +9,7 @@ command_timeout = 5000
 # Move the directory to the second line; extra $line_break adds gap
 format = '$all$line_break$directory$character'
 # Time on the right (fill pushes it to the right edge)
-right_format = '$fill$time'
+right_format = '$time'
 
 [package]
 disabled = true
@@ -76,7 +76,7 @@ symbol = " "
 detect_extensions = ['cpp']
 symbol = " "
 format = 'via $symbol($output) '
-command = 'g++-14 --version | grep -oP "(?<=\) )\d+\.\d+\.\d+"'
+command = 'g++ --version 2>/dev/null | head -1 | grep -oE "[0-9]+\\.[0-9]+\\.[0-9]+" | head -1'
 
 [conda]
 symbol = " "

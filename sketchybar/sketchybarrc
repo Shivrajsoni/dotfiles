@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export SKETCHYBAR_CONFIG_DIR="/Users/shivraj/dotfiles/sketchybar"
+export SKETCHYBAR_CONFIG_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SKETCHYBAR_CONFIG_DIR/variables.sh"
 
 sketchybar --bar height=$BAR_HEIGHT \

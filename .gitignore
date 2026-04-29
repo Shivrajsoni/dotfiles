@@ -1,8 +1,13 @@
-# Neovim/Vim runtime state (not config — do not version)
+# OS junk
+**/.DS_Store
+
+# Neovim/Vim runtime state
 sessions/
 undodir/
 
-# macOS
-.DS_Store
+# Obsidian machine-specific state
+obsidian/workspace.json
+obsidian/workspace-mobile.json
 
-# sketchybar todo lives in $HOME/.sketchybar_todo (not in repo)
+# Wallpapers (too large for git — copied locally by bootstrap)
+wallpapers/

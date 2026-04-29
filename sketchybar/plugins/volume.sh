@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$HOME/dotfiles/sketchybar/variables.sh"
+source "${SKETCHYBAR_CONFIG_DIR:-$HOME/dotfiles/sketchybar}/variables.sh"
 
 case "$SENDER" in
   "mouse.entered")

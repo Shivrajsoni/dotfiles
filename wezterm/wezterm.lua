@@ -1,73 +1,44 @@
--- ██╗    ██╗███████╗███████╗████████╗███████╗██████╗ ███╗   ███╗
--- ██║    ██║██╔════╝╚══███╔╝╚══██╔══╝██╔════╝██╔══██╗████╗ ████║
--- ██║ █╗ ██║█████╗    ███╔╝    ██║   █████╗  ██████╔╝██╔████╔██║
--- ██║███╗██║██╔══╝   ███╔╝     ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║
--- ╚███╔███╔╝███████╗███████╗   ██║   ███████╗██║  ██║██║ ╚═╝ ██║
---  ╚══╝╚══╝ ╚══════╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝
-
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
-
--- This will hold the configuration.
 local config = wezterm.config_builder()
 
-
-
--- This is where you actually apply your config choices
-
+-- ── Font & Appearance ──────────────────────────────────────────────
 config.font = wezterm.font("JetBrainsMono Nerd Font")
-
---config.font = wezterm.font("MesloLGS Nerd Font Mono")
 config.font_size = 16
-
+config.color_scheme = "Catppuccin Mocha"
 config.enable_tab_bar = false
-
 config.window_decorations = "RESIZE"
 config.window_padding = {
 	left = 10,
 	right = 10,
 	top = 20,
-
 	bottom = 0,
 }
-config.color_scheme = "Catppuccin Mocha"
-wezterm.on("gui-startup", function(cmd)
-	local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
-	window:gui_window():maximize()
-end)
+
+-- ── Performance ────────────────────────────────────────────────────
 config.enable_kitty_keyboard = true
 config.max_fps = 120
--- background
 
-local h = {}
+-- ── Maximize on startup ────────────────────────────────────────────
+wezterm.on("gui-startup", function(cmd)
+	local _, _, window = wezterm.mux.spawn_window(cmd or {})
+	window:gui_window():maximize()
+end)
 
-h.get_random_entry = function(tbl)
-	local keys = {}
-	for key, _ in pairs(tbl) do -- Fix: Use `pairs`, not `ipairs`
-		table.insert(keys, key)
-	end
-	if #keys == 0 then
-		return nil -- Fix: Handle case where no wallpapers are found
-	end
-	local randomKey = keys[math.random(1, #keys)]
-	return tbl[randomKey]
-end
+-- ── Background wallpaper (optional) ────────────────────────────────
+-- Set WEZTERM_WALLPAPER_DIR env variable to a directory of images.
+-- If not set or empty, no background wallpaper is applied.
+-- Resolve dotfiles dir: this config lives at dotfiles/wezterm/wezterm.lua
+local dotfiles_dir = wezterm.config_dir .. "/.."
+local wallpaper_dir = os.getenv("WEZTERM_WALLPAPER_DIR")
+	or (dotfiles_dir .. "/wallpapers")
 
-local M = {}
-
-M.get_wallpaper = function(dir)
-	local wallpapers = wezterm.glob(dir .. "/*") -- Fix: Use `list_dir` instead of `glob`
-	if not wallpapers then
-		wezterm.log_error("No wallpapers found in directory: " .. dir)
+local function get_wallpaper(dir)
+	local wallpapers = wezterm.glob(dir .. "/*")
+	if not wallpapers or #wallpapers == 0 then
 		return nil
 	end
-
-	local wallpaper = h.get_random_entry(wallpapers)
-	if not wallpaper then
-		wezterm.log_error("Failed to select a random wallpaper.")
-		return nil
-	end
-
+	local wallpaper = wallpapers[math.random(1, #wallpapers)]
 	return {
 		source = { File = { path = wallpaper } },
 		height = "Cover",
@@ -84,10 +55,10 @@ M.get_wallpaper = function(dir)
 	}
 end
 
--- Fix: Remove unnecessary `/**` from path
-local path = "/Users/shivraj/Developer/wallpaper/terminal-wallpaper/"
+-- Only set background if wallpaper directory exists and has files
+local bg = get_wallpaper(wallpaper_dir)
+if bg then
+	config.background = { bg }
+end
 
-config.background = { M.get_wallpaper(path) }
-
--- and finally, return the configuration to wezterm
 return config
