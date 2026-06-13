@@ -1,11 +1,30 @@
 export DOTFILES="${DOTFILES:-$HOME/dotfiles}"
 
+# ── Helpers ─────────────────────────────────────────────────────────
+# has  → true if a command exists (silently). Use: if has fzf; then ...
+# load → source the first file in the list that exists, then stop.
+has()  { command -v "$1" >/dev/null 2>&1; }
+load() {
+  for file in "$@"; do
+    if [[ -f "$file" ]]; then
+      source "$file"
+      return
+    fi
+  done
+}
+
 # ── PATH ────────────────────────────────────────────────────────────
 typeset -U path PATH                     # auto-dedupe PATH (no repeated entries)
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-[ -d "/opt/homebrew/bin" ] && export PATH="/opt/homebrew/bin:$PATH"
+
+if [[ -d /opt/homebrew/bin ]]; then
+  export PATH="/opt/homebrew/bin:$PATH"
+fi
+
 export BUN_INSTALL="$HOME/.bun"
-[ -d "$BUN_INSTALL/bin" ] && export PATH="$BUN_INSTALL/bin:$PATH"
+if [[ -d "$BUN_INSTALL/bin" ]]; then
+  export PATH="$BUN_INSTALL/bin:$PATH"
+fi
 
 # ── History ─────────────────────────────────────────────────────────
 HISTFILE="$HOME/.zsh_history"
@@ -25,22 +44,36 @@ setopt CORRECT                 # offer correction for mistyped commands
 setopt INTERACTIVE_COMMENTS    # allow # comments in the interactive shell
 
 # ── Completions (cached) ────────────────────────────────────────────
+# Rebuild the completion cache only if it's missing or older than a day,
+# otherwise load it as-is (-C skips the slow security check) for fast startup.
 autoload -Uz compinit
 ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump"
-[[ ! -f "$ZSH_COMPDUMP" || -n $(find "$ZSH_COMPDUMP" -mmin +1440 2>/dev/null) ]] \
-    && compinit -d "$ZSH_COMPDUMP" || compinit -C -d "$ZSH_COMPDUMP"
 
-# ── Starship ────────────────────────────────────────────────────────
-command -v starship &>/dev/null && eval "$(starship init zsh)"
+if [[ ! -f "$ZSH_COMPDUMP" ]]; then
+  compinit -d "$ZSH_COMPDUMP"                       # no cache yet → full build
+elif [[ -n $(find "$ZSH_COMPDUMP" -mmin +1440 2>/dev/null) ]]; then
+  compinit -d "$ZSH_COMPDUMP"                       # cache > 24h old → rebuild
+else
+  compinit -C -d "$ZSH_COMPDUMP"                    # fresh cache → trust it (fast)
+fi
 
-# ── Zoxide ──────────────────────────────────────────────────────────
-command -v zoxide &>/dev/null && eval "$(zoxide init zsh)" && alias cd='z'
+# ── Starship (prompt) ───────────────────────────────────────────────
+if has starship; then
+  eval "$(starship init zsh)"
+fi
+
+# ── Zoxide (smart cd) ───────────────────────────────────────────────
+if has zoxide; then
+  eval "$(zoxide init zsh)"
+  alias cd='z'
+fi
 
 # ── fzf (Ctrl-R history · Ctrl-T file picker · Alt-C cd into dir) ────
-if command -v fzf &>/dev/null; then
-  source <(fzf --zsh)                                  # keybindings + completion (fzf ≥0.48)
+if has fzf; then
+  source <(fzf --zsh)                               # keybindings + completion (fzf ≥0.48)
   export FZF_DEFAULT_OPTS="--height 45% --layout reverse --border --info inline"
-  if command -v fd &>/dev/null; then                   # use fd: faster, respects .gitignore
+
+  if has fd; then                                   # use fd: faster, respects .gitignore
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
@@ -48,52 +81,88 @@ if command -v fzf &>/dev/null; then
 fi
 
 # ── Zsh plugins ─────────────────────────────────────────────────────
-_src() { for f in "$@"; do [[ -f "$f" ]] && source "$f" && return; done; }
-_brew="${HOMEBREW_PREFIX:-/opt/homebrew}"
-_src "$_brew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" \
+# Try the Homebrew path first, fall back to the Linux system path.
+brew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
+
+load "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" \
      /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-_src "$_brew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" \
+
+load "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" \
      /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-unfunction _src 2>/dev/null; unset _brew
+
+unset brew_prefix
 
 # ── Bun completions ─────────────────────────────────────────────────
-[ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
+if [[ -s "$BUN_INSTALL/_bun" ]]; then
+  source "$BUN_INSTALL/_bun"
+fi
 
-# ── NVM (lazy-loaded) ───────────────────────────────────────────────
+# ── NVM (lazy-loaded for fast startup) ──────────────────────────────
+# NVM is slow to load, so we don't load it at startup. Instead we create
+# stub functions for nvm/node/npm/npx. The first time you run any of them,
+# the stub loads the real NVM, removes itself, then runs your command.
 export NVM_DIR="$HOME/.nvm"
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-  _nvm_lazy_load() { unfunction nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; }
-  nvm()  { _nvm_lazy_load; nvm "$@"; }
-  node() { _nvm_lazy_load; command node "$@"; }
-  npm()  { _nvm_lazy_load; command npm "$@"; }
-  npx()  { _nvm_lazy_load; command npx "$@"; }
+
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  load_real_nvm() {
+    unfunction nvm node npm npx 2>/dev/null   # remove the stubs
+    source "$NVM_DIR/nvm.sh"                   # load the real thing
+  }
+  nvm()  { load_real_nvm; nvm "$@"; }
+  node() { load_real_nvm; command node "$@"; }
+  npm()  { load_real_nvm; command npm "$@"; }
+  npx()  { load_real_nvm; command npx "$@"; }
 fi
 
 # ── GPG ─────────────────────────────────────────────────────────────
-[[ -t 0 ]] && export GPG_TTY=$(tty 2>/dev/null)
+# Tell GPG which terminal to ask for the passphrase (only in real terminals).
+if [[ -t 0 ]]; then
+  export GPG_TTY=$(tty 2>/dev/null)
+fi
 
 # ── Aliases ─────────────────────────────────────────────────────────
-command -v eza     &>/dev/null && alias ls='eza --icons --group-directories-first' \
-                                        ll='eza -lah --icons --git --group-directories-first' \
-                                        lt='eza -T --icons --level=2'
-command -v bat     &>/dev/null && alias cat='bat'
-command -v lazygit &>/dev/null && alias lg='lazygit'
-command -v kubectl &>/dev/null && alias k='kubectl'
-alias gst="git status" gca="git commit -a -m" gp="git push origin HEAD" gdiff="git diff" gadd="git add"
-alias gco="git checkout" gl="git graph"          # gl → pretty all-branch log (alias in .gitconfig)
-alias ..='cd ..' ...='cd ../..' ....='cd ../../..'
+if has eza; then
+  alias ls='eza --icons --group-directories-first'
+  alias ll='eza -lah --icons --git --group-directories-first'
+  alias lt='eza -T --icons --level=2'
+fi
+
+if has bat;     then alias cat='bat';   fi
+if has lazygit; then alias lg='lazygit'; fi
+if has kubectl; then alias k='kubectl';  fi
+
+# Git shortcuts
+alias gst="git status"
+alias gca="git commit -a -m"
+alias gp="git push origin HEAD"
+alias gdiff="git diff"
+alias gadd="git add"
+alias gco="git checkout"
+alias gl="git graph"             # pretty all-branch log (alias defined in .gitconfig)
+
+# Jump up directories
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
 
 # mkcd: make a directory (and parents) then jump into it
-mkcd() { mkdir -p "$1" && cd "$1"; }
+mkcd() {
+  mkdir -p "$1"
+  cd "$1"
+}
 
 # ── Sketchybar todo ─────────────────────────────────────────────────
-[ -f "$DOTFILES/config/sketchybar/todo.command" ] && \
-    todo() { "$DOTFILES/config/sketchybar/todo.command" "$@"; }
+if [[ -f "$DOTFILES/config/sketchybar/todo.command" ]]; then
+  todo() { "$DOTFILES/config/sketchybar/todo.command" "$@"; }
+fi
 
-# ── Fastfetch (skip in IDEs) ────────────────────────────────────────
+# ── Fastfetch (skip inside IDE terminals) ───────────────────────────
 if [[ -o interactive ]] && [[ "$TERM_PROGRAM" != "vscode" && "$TERM_PROGRAM" != "Cursor" ]]; then
-  clear && fastfetch -c "$DOTFILES/config/fastfetch/config.jsonc" 2>/dev/null || true
+  clear
+  fastfetch -c "$DOTFILES/config/fastfetch/config.jsonc" 2>/dev/null || true
 fi
 
 # ── Local overrides (machine-specific, never committed) ─────────────
-[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+if [[ -f "$HOME/.zshrc.local" ]]; then
+  source "$HOME/.zshrc.local"
+fi
