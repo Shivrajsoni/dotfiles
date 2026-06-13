@@ -63,6 +63,21 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 
+# ── Security ────────────────────────────────────────────────────────
+# Require password immediately after screensaver
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+# Disable Safari auto-opening downloaded files
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+
+# ── Finder extras ───────────────────────────────────────────────────
+# Show all file extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# ── Feel ────────────────────────────────────────────────────────────
+# Snappy window resize animation
+defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+
 echo "macOS defaults applied. Restart Finder and Dock..."
 killall Finder 2>/dev/null || true
 killall Dock 2>/dev/null || true

@@ -45,7 +45,7 @@ log_info "Detected package manager: $PKG"
 $UPDATE
 
 # ── Core packages (same name across distros) ────────────────────────
-COMMON="zsh tmux git curl wget unzip jq htop tree fzf ripgrep"
+COMMON="zsh tmux git curl wget unzip jq htop tree fzf ripgrep gh tldr lazygit"
 
 log_info "Installing core packages..."
 $INSTALL $COMMON
@@ -56,7 +56,7 @@ log_info "Installing distro-specific packages..."
 case "$PKG" in
     apt)
         # bat is 'batcat' on Debian/Ubuntu, fd is 'fd-find'
-        $INSTALL bat fd-find
+        $INSTALL bat fd-find zsh-autosuggestions zsh-syntax-highlighting
         # Create symlinks for consistent names
         [ ! -L /usr/local/bin/bat ] && $SUDO ln -sf "$(which batcat)" /usr/local/bin/bat 2>/dev/null || true
         [ ! -L /usr/local/bin/fd ]  && $SUDO ln -sf "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
@@ -70,10 +70,10 @@ case "$PKG" in
         fi
         ;;
     pacman)
-        $INSTALL bat fd eza
+        $INSTALL bat fd eza zsh-autosuggestions zsh-syntax-highlighting
         ;;
     dnf)
-        $INSTALL bat fd-find eza
+        $INSTALL bat fd-find eza zsh-autosuggestions zsh-syntax-highlighting
         ;;
 esac
 

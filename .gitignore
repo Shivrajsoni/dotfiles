@@ -4,6 +4,7 @@
 # Neovim/Vim runtime state
 sessions/
 undodir/
+*.vim
 
 # Obsidian machine-specific state
 obsidian/workspace.json
