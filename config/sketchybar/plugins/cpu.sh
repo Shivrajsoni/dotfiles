@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-# Exit if NAME isn't set (required by sketchybar)
-if [ -z "$NAME" ]; then
-  echo "Error: NAME variable is not set."
-  exit 1
-fi
+source "${SKETCHYBAR_CONFIG_DIR:-$HOME/.config/sketchybar}/variables.sh"
 
-# Get CPU usage efficiently using ps
-CORES=$(sysctl -n hw.logicalcpu)
-CPU_PERCENTAGE=$(ps -A -o %cpu | awk -v cores="$CORES" '{s+=$1} END {printf "%d\n", s/cores}')
+# Real utilization (user + sys) over a 1s window, same counters Activity
+# Monitor uses. iostat's first sample is a since-boot average, so take the
+# second; unlike `top` it costs ~0 CPU itself.
+CPU=$(iostat -C -c 2 -w 1 | awk 'END {print $4 + $5}')
 
-# Send to sketchybar
-sketchybar --set "$NAME" label="${CPU_PERCENTAGE}%"
+COLOR=$WHITE
+[ "$CPU" -ge 60 ] && COLOR=$YELLOW
+[ "$CPU" -ge 80 ] && COLOR=$RED
+
+sketchybar --set "$NAME" label="${CPU}%" icon.color="$COLOR"

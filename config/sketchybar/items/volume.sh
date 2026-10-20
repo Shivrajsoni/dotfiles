@@ -1,16 +1,7 @@
 #!/usr/bin/env bash
 
-COLOR="$GREEN"
-
-sketchybar \
-  --add item sound right \
-  --set sound \
-  icon=󰕾 \
-  icon.color="$COLOR" \
-  label.color="$COLOR" \
-  script="$PLUGIN_DIR/volume.sh" \
-  --subscribe sound volume_change \
-                    mouse.entered \
-                    mouse.exited \
-                    mouse.scrolled.up \
-                    mouse.scrolled.down
+# Scroll to change volume, click to mute.
+sketchybar --add item sound right \
+  --set sound icon=󰕾 script="$PLUGIN_DIR/volume.sh" \
+  --subscribe sound volume_change mouse.entered mouse.exited mouse.clicked \
+                    mouse.scrolled

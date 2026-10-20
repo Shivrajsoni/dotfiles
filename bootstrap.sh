@@ -1,154 +1,87 @@
 #!/usr/bin/env bash
-# bootstrap.sh — One-command dotfiles setup
-# Usage: bash bootstrap.sh [--dry-run] [--link-only]
-
+# One-command setup. Usage: bash bootstrap.sh [--dry-run] [--link-only]
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$DOTFILES_DIR/scripts/lib.sh"
+
 BACKUP_DIR="$HOME/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
 DRY_RUN=false
 LINK_ONLY=false
-
 for arg in "$@"; do
   case "$arg" in
     --dry-run)   DRY_RUN=true ;;
     --link-only) LINK_ONLY=true ;;
+    *) err "Unknown flag: $arg"; exit 1 ;;
   esac
 done
 
-# ── Logging ─────────────────────────────────────────────────────────
-GREEN='\033[0;32m' BLUE='\033[0;34m' RED='\033[0;31m' YELLOW='\033[0;33m' NC='\033[0m'
-log_info()    { echo -e "${BLUE}[info]${NC}  $1"; }
-log_success() { echo -e "${GREEN}[done]${NC}  $1"; }
-log_error()   { echo -e "${RED}[error]${NC} $1"; }
-log_warn()    { echo -e "${YELLOW}[skip]${NC}  $1"; }
+run() { if $DRY_RUN; then echo "[dry-run] $*"; else "$@"; fi; }
 
-run() { $DRY_RUN && echo -e "${YELLOW}[dry-run]${NC} $*" || "$@"; }
+info "Dotfiles: $DOTFILES_DIR ($OS)"
 
-echo ""
-echo "  ╔══════════════════════════════════════╗"
-echo "  ║       Dotfiles Bootstrap             ║"
-echo "  ╚══════════════════════════════════════╝"
-echo ""
-log_info "Dotfiles: $DOTFILES_DIR"
-$DRY_RUN   && log_warn "Dry-run mode — no changes will be made"
-$LINK_ONLY && log_warn "Link-only mode — skipping packages & toolchain"
-
-# ── 1. Detect OS ────────────────────────────────────────────────────
-OS_TYPE="$(uname -s)"
-case "$OS_TYPE" in
-    Darwin*) OS_TYPE="Mac"   ;;
-    Linux*)  OS_TYPE="Linux" ;;
-    *)       log_error "Unsupported OS: $OS_TYPE"; exit 1 ;;
-esac
-export OS_TYPE
-log_info "OS: $OS_TYPE"
-
-# ── 2. System packages ──────────────────────────────────────────────
+# ── 1. Packages, toolchain, system defaults ─────────────────────────
 if ! $LINK_ONLY; then
-  log_info "Installing system packages..."
-  if [ "$OS_TYPE" = "Mac" ]; then
-      if ! command -v brew &>/dev/null; then
-          log_info "Installing Homebrew..."
-          run /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          eval "$(/opt/homebrew/bin/brew shellenv)"
-      fi
-      run brew bundle --file="$DOTFILES_DIR/Brewfile" --no-lock || true
-      run brew services start sketchybar 2>/dev/null || true
-  elif [ "$OS_TYPE" = "Linux" ]; then
-      run bash "$DOTFILES_DIR/scripts/linux-packages.sh"
+  if [ "$OS" = mac ]; then
+    if ! has brew; then
+      run /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+    run brew bundle --file="$DOTFILES_DIR/Brewfile"
+    run bash "$DOTFILES_DIR/scripts/macos-defaults.sh"
+  else
+    run bash "$DOTFILES_DIR/scripts/linux-packages.sh"
   fi
-  log_success "System packages installed"
-
-  # ── 3. Dev toolchain ────────────────────────────────────────────────
-  log_info "Setting up dev toolchain..."
   run bash "$DOTFILES_DIR/scripts/dev-toolchain.sh"
-  log_success "Dev toolchain ready"
-
-  # ── 4. macOS defaults ───────────────────────────────────────────────
-  if [ "$OS_TYPE" = "Mac" ]; then
-      log_info "Applying macOS defaults..."
-      run bash "$DOTFILES_DIR/scripts/macos-defaults.sh"
-  fi
 fi
 
-# ── 5. Symlink configurations ──────────────────────────────────────
-log_info "Symlinking configurations..."
-
-SYMLINKS=(
-    "home/.zshrc:$HOME/.zshrc"
-    "home/.bashrc:$HOME/.bashrc"
-    "home/.tmux.conf:$HOME/.tmux.conf"
-    "config/starship/starship.toml:$HOME/.config/starship.toml"
-    "config/wezterm:$HOME/.config/wezterm"
-    "config/fastfetch:$HOME/.config/fastfetch"
-    "git/.gitconfig:$HOME/.gitconfig"
+# ── 2. Symlinks (existing files are moved to $BACKUP_DIR) ───────────
+LINKS=(
+  "home/.zshrc:$HOME/.zshrc"
+  "home/.bashrc:$HOME/.bashrc"
+  "home/.tmux.conf:$HOME/.tmux.conf"
+  "git/.gitconfig:$HOME/.gitconfig"
+  "config/starship/starship.toml:$HOME/.config/starship.toml"
+  "config/wezterm:$HOME/.config/wezterm"
+  "config/fastfetch:$HOME/.config/fastfetch"
+)
+[ "$OS" = mac ] && LINKS+=(
+  "config/aerospace:$HOME/.config/aerospace"
+  "config/sketchybar:$HOME/.config/sketchybar"
 )
 
-if [ "$OS_TYPE" = "Mac" ]; then
-    SYMLINKS+=(
-        "config/aerospace:$HOME/.config/aerospace"
-        "config/sketchybar:$HOME/.config/sketchybar"
-    )
-fi
+for entry in "${LINKS[@]}"; do
+  src="$DOTFILES_DIR/${entry%%:*}"
+  dest="${entry#*:}"
 
-for entry in "${SYMLINKS[@]}"; do
-    src="$DOTFILES_DIR/${entry%%:*}"
-    dest="${entry#*:}"
-
-    run mkdir -p "$(dirname "$dest")"
-
-    if [ -e "$dest" ] || [ -L "$dest" ]; then
-        if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
-            log_warn "Already linked: ${entry%%:*}"
-            continue
-        fi
-        if [ ! -d "$BACKUP_DIR" ]; then
-            run mkdir -p "$BACKUP_DIR"
-            log_info "Backing up existing configs to $BACKUP_DIR"
-        fi
-        run mv "$dest" "$BACKUP_DIR/"
-    fi
-
-    run ln -s "$src" "$dest"
-    log_success "Linked ${entry%%:*} → $dest"
+  if [ "$(readlink "$dest" 2>/dev/null)" = "$src" ]; then
+    warn "Already linked: ${entry%%:*}"
+    continue
+  fi
+  run mkdir -p "$(dirname "$dest")"
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    run mkdir -p "$BACKUP_DIR"
+    run mv "$dest" "$BACKUP_DIR/"
+    info "Backed up $dest"
+  fi
+  run ln -s "$src" "$dest"
+  ok "Linked ${entry%%:*}"
 done
 
-# ── 6. Export DOTFILES persistently ───────────────────────────────
-ZSHENV="$HOME/.zshenv"
-if ! grep -q "DOTFILES=" "$ZSHENV" 2>/dev/null; then
-    run sh -c "echo 'export DOTFILES=\"$DOTFILES_DIR\"' >> \"$ZSHENV\""
-    log_success "DOTFILES exported to ~/.zshenv"
-else
-    log_warn "DOTFILES already in ~/.zshenv"
+# ── 3. DOTFILES env var, tmux plugin manager, services ──────────────
+grep -qs "DOTFILES=" "$HOME/.zshenv" || run sh -c "echo 'export DOTFILES=\"$DOTFILES_DIR\"' >> \"$HOME/.zshenv\""
+
+[ -d "$HOME/.tmux/plugins/tpm" ] || run git clone -q https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+
+if [ "$OS" = mac ] && ! $LINK_ONLY; then
+  run brew services start sketchybar
 fi
 
-# ── 7. Tmux Plugin Manager ─────────────────────────────────────────
-if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-    log_info "Installing Tmux Plugin Manager..."
-    run git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-    log_success "TPM installed"
-else
-    log_warn "TPM already installed"
-fi
-
-# ── 8. Default shell → zsh ──────────────────────────────────────────
-ZSH_PATH="$(which zsh 2>/dev/null)"
+# ── 4. Default shell → zsh ──────────────────────────────────────────
+ZSH_PATH="$(command -v zsh || true)"
 if [ -n "$ZSH_PATH" ] && [ "$SHELL" != "$ZSH_PATH" ]; then
-    log_info "Setting default shell to zsh..."
-    SUDO=""; [ "$(id -u)" -ne 0 ] && SUDO="sudo"
-    if ! grep -q "$ZSH_PATH" /etc/shells 2>/dev/null; then
-        run $SUDO sh -c "echo '$ZSH_PATH' >> /etc/shells"
-    fi
-    run chsh -s "$ZSH_PATH" || log_error "Failed to change shell. Run: chsh -s $ZSH_PATH"
-else
-    log_warn "Already using zsh"
+  grep -qs "^$ZSH_PATH$" /etc/shells || run sh -c "echo '$ZSH_PATH' | $SUDO tee -a /etc/shells >/dev/null"
+  run chsh -s "$ZSH_PATH" || err "chsh failed. Run: chsh -s $ZSH_PATH"
 fi
 
-echo ""
-echo "  ╔══════════════════════════════════════╗"
-echo "  ║       Setup Complete!                ║"
-echo "  ╚══════════════════════════════════════╝"
-echo ""
-log_success "Restart your terminal to enjoy."
-log_info "Run 'prefix + I' inside tmux to install tmux plugins."
+ok "Setup complete. Restart your terminal, then press prefix + I in tmux to install plugins."

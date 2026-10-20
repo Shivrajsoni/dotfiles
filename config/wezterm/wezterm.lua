@@ -32,14 +32,6 @@ config.colors = {
 		"#56d4dd", -- bright cyan
 		"#f0f6fc", -- bright white
 	},
-	tab_bar = {
-		background = "#010409",
-		active_tab = { bg_color = "#0d1117", fg_color = "#e6edf3" },
-		inactive_tab = { bg_color = "#010409", fg_color = "#8b949e" },
-		inactive_tab_hover = { bg_color = "#161b22", fg_color = "#e6edf3" },
-		new_tab = { bg_color = "#010409", fg_color = "#8b949e" },
-		new_tab_hover = { bg_color = "#161b22", fg_color = "#e6edf3" },
-	},
 }
 
 -- ── Font & Appearance ───────────────────────────────────────────────
@@ -48,10 +40,15 @@ config.font_size = 16
 config.enable_tab_bar = false
 config.window_decorations = "RESIZE"
 config.window_padding = { left = 10, right = 10, top = 20, bottom = 0 }
-
--- ── Performance ─────────────────────────────────────────────────────
 config.enable_kitty_keyboard = true
 config.max_fps = 120
+
+-- ── Keys ────────────────────────────────────────────────────────────
+-- Cmd+Left/Right → Home/End
+config.keys = {
+	{ key = "LeftArrow", mods = "CMD", action = wezterm.action.SendKey({ key = "Home" }) },
+	{ key = "RightArrow", mods = "CMD", action = wezterm.action.SendKey({ key = "End" }) },
+}
 
 -- ── Maximize on startup ─────────────────────────────────────────────
 wezterm.on("gui-startup", function(cmd)

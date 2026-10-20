@@ -8,13 +8,11 @@
 
 [core]
 	pager = delta
-	compression = 9
 	whitespace = error
 	preloadindex = true
 
 [pull]
 	rebase = true
-	default = current
 
 [push]
 	autoSetupRemote = true
@@ -40,7 +38,6 @@
 	sort = version:refname
 
 [diff]
-	context = 3
 	renames = copies
 	interHunkContext = 10
 	colorMoved = default
@@ -59,9 +56,6 @@
 	showUntrackedFiles = all
 	showStash = true
 	branch = true
-
-[commit]
-	# gpgsign = true   # Enable after: gpg --gen-key && git config --global user.signingkey <KEY>
 
 [alias]
 	uncommit = reset --soft HEAD~1

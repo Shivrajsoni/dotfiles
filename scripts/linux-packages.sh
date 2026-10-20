@@ -1,121 +1,41 @@
 #!/usr/bin/env bash
-# Linux Package Installer
-# Mirrors the Brewfile for Linux distros (apt/pacman/dnf)
-# Handles package name differences across distros
-
+# Linux equivalent of the Brewfile (apt / pacman / dnf).
 set -e
+source "$(dirname "$0")/lib.sh"
 
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-NC='\033[0m'
+[ "$OS" = linux ] || { warn "Not Linux"; exit 0; }
 
-log_info() { echo -e "${BLUE}[linux]${NC} $1"; }
-log_done() { echo -e "${GREEN}[linux]${NC} $1"; }
-log_err()  { echo -e "${RED}[linux]${NC} $1"; }
-
-if [ "$(uname -s)" != "Linux" ]; then
-    echo "Not Linux — skipping."
-    exit 0
-fi
-
-# ── Use sudo only if not root ───────────────────────────────────────
-SUDO=""
-[ "$(id -u)" -ne 0 ] && SUDO="sudo"
-
-# ── Detect package manager ──────────────────────────────────────────
-if command -v apt &>/dev/null; then
-    PKG="apt"
-    INSTALL="$SUDO apt install -y"
-    UPDATE="$SUDO apt update"
-elif command -v pacman &>/dev/null; then
-    PKG="pacman"
-    INSTALL="$SUDO pacman -S --noconfirm"
-    UPDATE="$SUDO pacman -Syu --noconfirm"
-elif command -v dnf &>/dev/null; then
-    PKG="dnf"
-    INSTALL="$SUDO dnf install -y"
-    UPDATE="$SUDO dnf check-update || true"
+if has apt; then
+  PM=apt;    INSTALL="$SUDO apt install -y";            $SUDO apt update
+elif has pacman; then
+  PM=pacman; INSTALL="$SUDO pacman -S --noconfirm --needed"; $SUDO pacman -Sy
+elif has dnf; then
+  PM=dnf;    INSTALL="$SUDO dnf install -y"
 else
-    log_err "No supported package manager found (need apt, pacman, or dnf)"
-    exit 1
+  err "Need apt, pacman, or dnf"; exit 1
 fi
+info "Package manager: $PM"
 
-log_info "Detected package manager: $PKG"
-$UPDATE
+$INSTALL zsh tmux git curl wget unzip jq htop tree fzf ripgrep gh tldr zsh-autosuggestions zsh-syntax-highlighting
 
-# ── Core packages (same name across distros) ────────────────────────
-COMMON="zsh tmux git curl wget unzip jq htop tree fzf ripgrep gh tldr lazygit"
-
-log_info "Installing core packages..."
-$INSTALL $COMMON
-
-# ── Packages with different names per distro ─────────────────────────
-log_info "Installing distro-specific packages..."
-
-case "$PKG" in
-    apt)
-        # bat is 'batcat' on Debian/Ubuntu, fd is 'fd-find'
-        $INSTALL bat fd-find zsh-autosuggestions zsh-syntax-highlighting
-        # Create symlinks for consistent names
-        [ ! -L /usr/local/bin/bat ] && $SUDO ln -sf "$(which batcat)" /usr/local/bin/bat 2>/dev/null || true
-        [ ! -L /usr/local/bin/fd ]  && $SUDO ln -sf "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
-        # eza: install from cargo if not in apt
-        if ! command -v eza &>/dev/null; then
-            if command -v cargo &>/dev/null; then
-                cargo install eza
-            else
-                log_info "eza requires cargo — will be available after dev-toolchain.sh runs"
-            fi
-        fi
-        ;;
-    pacman)
-        $INSTALL bat fd eza zsh-autosuggestions zsh-syntax-highlighting
-        ;;
-    dnf)
-        $INSTALL bat fd-find eza zsh-autosuggestions zsh-syntax-highlighting
-        ;;
+# Names differ per distro
+case "$PM" in
+  apt)    $INSTALL bat fd-find
+          # Debian/Ubuntu ship these as batcat / fdfind
+          $SUDO ln -sf "$(command -v batcat)" /usr/local/bin/bat
+          $SUDO ln -sf "$(command -v fdfind)" /usr/local/bin/fd ;;
+  pacman) $INSTALL bat fd eza fastfetch lazygit ;;
+  dnf)    $INSTALL bat fd-find eza fastfetch lazygit ;;
 esac
 
-# ── Tools installed via universal scripts (not in repos) ─────────────
-log_info "Installing tools via universal installers..."
+# Not in distro repos → official installers / cargo (cargo comes from dev-toolchain.sh)
+has starship || curl -sS https://starship.rs/install.sh | sh -s -- -y
+has zoxide   || curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
-# Starship
-if ! command -v starship &>/dev/null; then
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
-fi
+for crate in eza:eza delta:git-delta yazi:yazi-fm; do
+  has "${crate%%:*}" && continue
+  if has cargo; then cargo install --locked "${crate#*:}"
+  else warn "${crate%%:*} needs cargo; re-run after dev-toolchain.sh"; fi
+done
 
-# Zoxide
-if ! command -v zoxide &>/dev/null; then
-    curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-fi
-
-# Fastfetch
-if ! command -v fastfetch &>/dev/null; then
-    case "$PKG" in
-        apt)    $SUDO add-apt-repository -y ppa:zhangsongcui3371/fastfetch 2>/dev/null && $SUDO apt update && $INSTALL fastfetch || log_info "Install fastfetch manually: https://github.com/fastfetch-cli/fastfetch" ;;
-        pacman) $INSTALL fastfetch ;;
-        dnf)    $INSTALL fastfetch ;;
-    esac
-fi
-
-# Delta (git diff pager)
-if ! command -v delta &>/dev/null; then
-    if command -v cargo &>/dev/null; then
-        cargo install git-delta
-    else
-        log_info "delta requires cargo — will be available after dev-toolchain.sh runs"
-    fi
-fi
-
-# Yazi (terminal file manager)
-if ! command -v yazi &>/dev/null; then
-    if command -v cargo &>/dev/null; then
-        cargo install --locked yazi-fm yazi-cli
-    else
-        log_info "yazi requires cargo — will be available after dev-toolchain.sh runs"
-    fi
-fi
-
-echo ""
-log_done "Linux packages installed successfully!"
+ok "Linux packages installed"

@@ -8,46 +8,30 @@ bash bootstrap.sh
 
 Detects macOS / Linux, installs packages, sets up dev tools (Node, Bun, Python, Rust, C++), symlinks configs. Existing configs are backed up to `~/dotfiles_backup_<timestamp>/`.
 
-## Quick commands
+## Commands
 
 ```bash
-make install    # full setup (brew + link + toolchain + macos defaults)
+make install    # full setup (packages, toolchain, macOS defaults, links)
 make link       # re-symlink configs only (safe to re-run)
-make brew       # install/update brew packages
 make update     # upgrade brew + tmux plugins
-```
-
-## Flags
-
-```bash
-bash bootstrap.sh --dry-run    # preview all actions, no changes
-bash bootstrap.sh --link-only  # re-link configs only, skip packages
+bash bootstrap.sh --dry-run    # preview every action
 ```
 
 ## Structure
 
 ```
-├── home/
-│   ├── .zshrc             # zsh config
-│   ├── .bashrc            # bash config (Linux)
-│   └── .tmux.conf         # multiplexer
-├── config/
-│   ├── starship/          # prompt (→ ~/.config/starship.toml)
-│   ├── wezterm/           # terminal emulator
-│   ├── fastfetch/         # system info on shell open
-│   ├── aerospace/         # tiling WM (macOS only)
-│   └── sketchybar/        # status bar (macOS only)
-├── git/.gitconfig         # git settings
-├── obsidian/              # vault settings (manual setup)
-├── wallpapers/            # wezterm backgrounds (gitignored, add locally)
-├── scripts/
-│   ├── dev-toolchain.sh   # nvm, bun, uv, rust, c++
-│   ├── macos-defaults.sh  # keyboard, finder, dock, security
-│   └── linux-packages.sh  # apt / pacman / dnf
-├── Brewfile               # macOS packages
-├── Makefile               # shortcuts
-└── bootstrap.sh           # entry point
+├── home/                  # → $HOME: .zshrc, .bashrc, .tmux.conf
+├── git/.gitconfig
+├── config/                # → ~/.config
+│   ├── shell/common.sh    # aliases, PATH, lazy nvm — shared by zsh + bash (not linked, sourced)
+│   ├── starship/  wezterm/  fastfetch/
+│   └── aerospace/  sketchybar/   # tiling WM + status bar (macOS)
+├── scripts/               # lib.sh, dev-toolchain.sh, macos-defaults.sh, linux-packages.sh
+├── obsidian/              # vault settings (manual copy)
+├── Brewfile  Makefile  bootstrap.sh
 ```
+
+AeroSpace's `gaps.outer.top` must clear the sketchybar (`BAR_Y_OFFSET + BAR_HEIGHT` in `config/sketchybar/variables.sh`). Change one, change the other.
 
 ## Machine-specific overrides
 
@@ -55,11 +39,5 @@ Put anything machine-specific (IDE paths, work tokens, private aliases) in `~/.z
 
 ## After fresh install
 
-1. **Tmux plugins** — open tmux and press `prefix + I` (Ctrl-A I)
-2. **GPG signing** — to enable signed commits:
-   ```bash
-   gpg --gen-key
-   git config --global user.signingkey <YOUR_KEY_ID>
-   # Then uncomment gpgsign = true in git/.gitconfig
-   ```
-3. **Wallpapers** — copy images into `~/dotfiles/wallpapers/` for wezterm backgrounds
+1. **Tmux plugins** — open tmux, press `prefix + I` (Ctrl-A I).
+2. **GPG signing** — `gpg --gen-key`, then set `user.signingkey` and add `gpgsign = true` under `[commit]` in `git/.gitconfig`.

@@ -1,19 +1,8 @@
 #!/usr/bin/env bash
 
-source "${SKETCHYBAR_CONFIG_DIR:-$HOME/dotfiles/config/sketchybar}/variables.sh"
+source "$(dirname "$0")/helpers.sh"
 
-case "$SENDER" in
-  "mouse.entered")
-    sketchybar --animate tanh 10 --set "$NAME" background.color="$SURFACE1"
-    ;;
-  "mouse.exited")
-    sketchybar --animate tanh 10 --set "$NAME" background.color="$SURFACE0"
-    ;;
-  "mouse.clicked")
-    open -a Calendar
-    ;;
-  *)
-    LABEL=$(date '+%a %b %d  %H:%M')
-    sketchybar --set "$NAME" label="$LABEL"
-    ;;
-esac
+hover && exit 0
+[ "$SENDER" = "mouse.clicked" ] && { open -a Calendar; exit 0; }
+
+sketchybar --set "$NAME" label="$(date '+%a %d %b  %H:%M')"

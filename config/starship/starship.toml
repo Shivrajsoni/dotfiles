@@ -6,9 +6,6 @@ command_timeout = 5000
 [package]
 disabled = true
 
-format = '$all$directory$character' 
-right_format = ''
-
 [character]
 error_symbol = "[❯](bold red)"
 
@@ -16,30 +13,24 @@ error_symbol = "[❯](bold red)"
 min_time = 5000
 format = '[$duration](bold yellow)'
 
-
 [shell]
-fish_indicator = ''
-nu_indicator = 'nu '
-zsh_indicator = 'zsh '
-bash_indicator = ' '
+disabled = false
+zsh_indicator = 'zsh '
+bash_indicator = ' '
 format = '[$indicator]($style)'
 style = 'cyan bold'
-disabled = false
 
 [directory]
-truncate_to_repo = true 
+truncate_to_repo = true
 truncation_length = 2
 truncation_symbol = ''
 style = 'white'
 
-
 [git_branch]
+symbol = '[ ](green)'
 style = 'green'
-symbol = '[ ](green)'
 
 [git_state]
-format = '[\($state( $progress_current of $progress_total)\)]($style) '
-style = "bold purple"
 disabled = true
 
 [git_metrics]
@@ -50,166 +41,42 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 [git_status]
 format = '([$all_status$ahead_behind]($style) )'
 
-[aws]
-symbol = "  "
+[hostname]
+ssh_symbol = " "
 
-[buf]
-symbol = " "
-
+# ── Language symbols (Nerd Font) ────────────────────────────────────
 [c]
-symbol = " "
-
-[custom.cpp]
-detect_extensions = ['cpp']
-symbol = " "
-format = 'via $symbol($output) '
-command = 'g++ --version | grep -oP "(?<=\) )\d+\.\d+\.\d+"'
+symbol = " "
 
 [conda]
-symbol = " "
-
-[crystal]
-symbol = " "
-
-[dart]
-symbol = " "
+symbol = " "
 
 [docker_context]
-symbol = " "
-
-[elixir]
-symbol = " "
-
-[elm]
-symbol = " "
-
-[fennel]
-symbol = " "
-
-[fossil_branch]
-symbol = " "
+symbol = " "
 
 [golang]
-symbol = " "
-
-[guix_shell]
-symbol = " "
-
-[haskell]
-symbol = " "
-
-[haxe]
-symbol = " "
-
-[hg_branch]
-symbol = " "
-
-[hostname]
-ssh_symbol = " "
+symbol = " "
 
 [java]
-symbol = " "
-
-[julia]
-symbol = " "
-
-[kotlin]
-symbol = " "
+symbol = " "
 
 [lua]
-symbol = " "
-
-[memory_usage]
-symbol = "󰍛 "
-
-[meson]
-symbol = "󰔷 "
-
-[nim]
-symbol = "󰆥 "
-
-[nix_shell]
-symbol = " "
+symbol = " "
 
 [nodejs]
-symbol = " "
-
-[ocaml]
-symbol = " "
-
-[os.symbols]
-Alpaquita = " "
-Alpine = " "
-AlmaLinux = " "
-Amazon = " "
-Android = " "
-Arch = " "
-Artix = " "
-CentOS = " "
-Debian = " "
-DragonFly = " "
-Emscripten = " "
-EndeavourOS = " "
-Fedora = " "
-FreeBSD = " "
-Garuda = "󰛓 "
-Gentoo = " "
-HardenedBSD = "󰞌 "
-Illumos = "󰈸 "
-Kali = " "
-Linux = " "
-Mabox = " "
-Macos = " "
-Manjaro = " "
-Mariner = " "
-MidnightBSD = " "
-Mint = " "
-NetBSD = " "
-NixOS = " "
-OpenBSD = "󰈺 "
-openSUSE = " "
-OracleLinux = "󰌷 "
-Pop = " "
-Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-RockyLinux = " "
-Redox = "󰀘 "
-Solus = "󰠳 "
-SUSE = " "
-Ubuntu = " "
-Unknown = " "
-Void = " "
-Windows = "󰍲 "
-
-[perl]
-symbol = " "
-
-[php]
-symbol = " "
-
-[pijul_channel]
-symbol = " "
+symbol = " "
 
 [python]
-symbol = " "
-
-[rlang]
-symbol = "󰟔 "
-
-[ruby]
-symbol = " "
+symbol = " "
 
 [rust]
 symbol = "󱘗 "
 
-[scala]
-symbol = " "
-
-[swift]
-symbol = " "
-
 [zig]
-symbol = " "
+symbol = " "
 
-
+[custom.cpp]
+detect_extensions = ['cpp']
+symbol = " "
+format = 'via $symbol($output) '
+command = "g++ --version | head -n1 | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+' | head -n1"

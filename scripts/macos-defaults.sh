@@ -21,6 +21,8 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # ── Finder ──────────────────────────────────────────────────────────
 # Show hidden files
 defaults write com.apple.finder AppleShowAllFiles -bool true
+# Show all file extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 # Show path bar and status bar
 defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowStatusBar -bool true
@@ -30,6 +32,10 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 # No warning when changing file extensions
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# ── Menu bar ────────────────────────────────────────────────────────
+# Auto-hide: sketchybar takes its place
+defaults write NSGlobalDomain _HIHideMenuBar -bool true
 
 # ── Dock ────────────────────────────────────────────────────────────
 # Auto-hide dock
@@ -70,15 +76,10 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0
 # Disable Safari auto-opening downloaded files
 defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 
-# ── Finder extras ───────────────────────────────────────────────────
-# Show all file extensions
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
 # ── Feel ────────────────────────────────────────────────────────────
 # Snappy window resize animation
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
-echo "macOS defaults applied. Restart Finder and Dock..."
 killall Finder 2>/dev/null || true
 killall Dock 2>/dev/null || true
-echo "Done. Some changes require a logout/restart."
+echo "macOS defaults applied. Log out/in for some changes to take effect."

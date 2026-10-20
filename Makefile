@@ -1,17 +1,14 @@
-.PHONY: install link brew toolchain update
+.PHONY: install link brew update
 
-install: brew link toolchain
-	@[ "$$(uname)" = "Darwin" ] && bash scripts/macos-defaults.sh || true
+install:            ## full setup
+	bash bootstrap.sh
+
+link:               ## re-symlink configs only (safe to re-run)
+	bash bootstrap.sh --link-only
 
 brew:
 	brew bundle --file=Brewfile
 
-link:
-	bash bootstrap.sh --link-only
-
-toolchain:
-	bash scripts/dev-toolchain.sh
-
 update:
-	brew upgrade && brew bundle --file=Brewfile
-	tmux run-shell '~/.tmux/plugins/tpm/bin/update_plugins all' 2>/dev/null || true
+	brew update && brew upgrade && brew bundle --file=Brewfile
+	-~/.tmux/plugins/tpm/bin/update_plugins all

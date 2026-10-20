@@ -1,12 +1,6 @@
 # AeroSpace config — i3-like tiling on macOS
 # Docs: https://nikitabobko.github.io/AeroSpace/guide
 #
-# This config is based on best practices from the AeroSpace community.
-# It includes a dedicated resize mode and other improvements.
-#
-# NOTE: Some features like [theme] and [workspace-names] are not supported
-# in your current AeroSpace version (0.19.2-Beta).
-# Consider updating AeroSpace to get the latest features.
 
 # ——— General Settings ———
 start-at-login = true
@@ -15,19 +9,19 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
 accordion-padding = 0
-after-startup-command = ['exec-and-forget sketchybar']
 exec-on-workspace-change = ['/bin/bash', '-c', 'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE']
 
 # ——— Gaps ———
-# Gaps between windows (inner) and between windows and the screen edge (outer).
-# Set to 0 to disable gaps.
+# outer.top clears the sketchybar (y_offset 6 + height 32 = 38px) plus a gap.
+# Keep in sync with BAR_Y_OFFSET / BAR_HEIGHT in config/sketchybar/variables.sh.
+# left/right match the bar's margin (10) so windows align with it.
 [gaps]
-inner.horizontal = 10
-inner.vertical = 10
-outer.left = 0
-outer.right = 0
-outer.top = 6
-outer.bottom = 0
+inner.horizontal = 8
+inner.vertical = 8
+outer.left = 10
+outer.right = 10
+outer.top = 46
+outer.bottom = 10
 
 # ——— Key Bindings ———
 

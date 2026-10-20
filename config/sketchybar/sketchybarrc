@@ -4,54 +4,42 @@ export SKETCHYBAR_CONFIG_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SKETCHYBAR_CONFIG_DIR/variables.sh"
 
 sketchybar --bar height=$BAR_HEIGHT \
-  color=$BAR_COLOR \
-  corner_radius=$BAR_CORNER_RADIUS \
+  color=$TRANSPARENT \
   y_offset=$BAR_Y_OFFSET \
   margin=$BAR_MARGIN \
-  blur_radius=$BAR_BLUR \
+  padding_left=0 \
+  padding_right=0 \
   sticky=on \
   position=top \
-  shadow=$SHADOW \
   topmost=window \
   --default updates=when_shown \
   icon.font="$FONT:Bold:14.0" \
-  icon.color=$ICON_COLOR \
-  icon.padding_left=12 \
-  icon.padding_right=6 \
-  label.font="$FONT:Bold:13.0" \
-  label.color=$LABEL_COLOR \
-  label.padding_left=6 \
-  label.padding_right=12 \
+  icon.color=$WHITE \
+  icon.padding_left=10 \
+  icon.padding_right=4 \
+  label.font="$FONT:Bold:12.0" \
+  label.color=$SUBTEXT \
+  label.padding_left=4 \
+  label.padding_right=10 \
   background.height=$ITEM_HEIGHT \
   background.corner_radius=$ITEM_CORNER_RADIUS \
   background.color=$SURFACE0 \
   background.border_color=$SURFACE1 \
   background.border_width=$BORDER_WIDTH \
-  background.padding_left=6 \
-  background.padding_right=6 \
-  background.shadow.drawing=$SHADOW \
-  popup.background.border_width=$BORDER_WIDTH \
-  popup.background.corner_radius=$ITEM_CORNER_RADIUS \
-  popup.background.border_color=$SURFACE1 \
-  popup.background.color=$BASE \
-  popup.background.shadow.drawing=$SHADOW
+  background.padding_left=$PADDINGS \
+  background.padding_right=$PADDINGS
 
-# Left side (spaces, front_app, then todo in the empty portion)
-sketchybar --add event todo_update
+sketchybar --add event aerospace_workspace_change
+
+# Left: workspaces, front app
 source "$ITEM_DIR/spaces.sh"
 source "$ITEM_DIR/front_app.sh"
-source "$ITEM_DIR/todo.sh"
 
-# Right side
+# Right (added right-to-left): clock is outermost
 source "$ITEM_DIR/clock.sh"
 source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/volume.sh"
 source "$ITEM_DIR/cpu.sh"
 
-#################### Finalizing Setup ####################
-
-sketchybar --hotload true
-sketchybar --trigger todo_update
-sketchybar --update
-
+sketchybar --hotload true --update
 echo "sketchybar configuration loaded.."

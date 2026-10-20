@@ -12,3 +12,7 @@ obsidian/workspace-mobile.json
 
 # Wallpapers (too large for git — copied locally by bootstrap)
 wallpapers/
+
+# Generated tooling state
+.ruby-lsp/
+.claude/settings.local.json

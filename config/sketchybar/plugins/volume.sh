@@ -1,39 +1,30 @@
 #!/usr/bin/env bash
 
-source "${SKETCHYBAR_CONFIG_DIR:-$HOME/dotfiles/config/sketchybar}/variables.sh"
+source "$(dirname "$0")/helpers.sh"
+
+hover && exit 0
 
 case "$SENDER" in
-  "mouse.entered")
-    sketchybar --animate tanh 10 --set "$NAME" background.color="$SURFACE1"
+  mouse.clicked)
+    osascript -e 'set volume output muted not (output muted of (get volume settings))'
     ;;
-  "mouse.exited")
-    sketchybar --animate tanh 10 --set "$NAME" background.color="$SURFACE0"
-    ;;
-  "mouse.scrolled.up")
-    osascript -e 'set volume output volume (output volume of (get volume settings) + 5)'
-    ;;
-  "mouse.scrolled.down")
-    osascript -e 'set volume output volume (output volume of (get volume settings) - 5)'
-    ;;
-  *)
-    VOL_INFO=$(osascript -e 'set vol to get volume settings' -e 'return (output volume of vol as string) & "," & (output muted of vol as string)')
-    VOLUME=$(echo "$VOL_INFO" | cut -d',' -f1)
-    MUTED=$(echo "$VOL_INFO" | cut -d',' -f2)
-
-    if [ "$MUTED" = "true" ]; then
-      ICON="󰖁" # Speaker muted
-      LABEL="0%"
-    else
-      case $VOLUME in
-        100) ICON="󰕾" ;;
-        [6-9][0-9]) ICON="󰕾" ;; # Speaker high
-        [3-5][0-9]) ICON="󰖀" ;; # Speaker mid
-        [1-9]|[1-2][0-9]) ICON="󰕿" ;; # Speaker low
-        *) ICON="󰖁" # Speaker muted / 0
-      esac
-      LABEL="${VOLUME}%"
-    fi
-
-    sketchybar --set $NAME icon="$ICON" label="$LABEL"
+  mouse.scrolled)
+    # SCROLL_DELTA is positive when scrolling up
+    STEP=$(( ${SCROLL_DELTA:-0} > 0 ? 5 : -5 ))
+    osascript -e "set volume output volume ((output volume of (get volume settings)) + ($STEP))"
     ;;
 esac
+
+IFS=, read -r VOLUME MUTED < <(osascript -e 'set v to get volume settings' \
+  -e 'return (output volume of v as string) & "," & (output muted of v as string)')
+
+if [ "$MUTED" = "true" ] || [ "${VOLUME:-0}" -eq 0 ]; then
+  ICON="󰖁"; LABEL="muted"
+else
+  LABEL="${VOLUME}%"
+  if   [ "$VOLUME" -ge 60 ]; then ICON="󰕾"
+  elif [ "$VOLUME" -ge 30 ]; then ICON="󰖀"
+  else ICON="󰕿"; fi
+fi
+
+sketchybar --set "$NAME" icon="$ICON" label="$LABEL"
