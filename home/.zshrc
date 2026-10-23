@@ -25,7 +25,9 @@ autoload -Uz compinit
 # ── Integrations ────────────────────────────────────────────────────
 has fzf       && source <(fzf --zsh)     # Ctrl-R history · Ctrl-T files · Alt-C cd
 has starship  && eval "$(starship init zsh)"
-has zoxide    && eval "$(zoxide init zsh --cmd cd)"
+# Skipped in Claude Code: its shell snapshot copies the `cd` override but not
+# zoxide's chpwd hook, so zoxide's doctor warns on every command.
+has zoxide && [[ -z $CLAUDECODE ]] && eval "$(zoxide init zsh --cmd cd)"
 
 # Lazy conda: `conda init` costs ~100ms per shell.
 if [[ -x $HOME/miniconda3/bin/conda ]]; then
