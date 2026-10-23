@@ -31,8 +31,6 @@ brew "tldr"             # simplified man pages
 # macOS Window Management
 tap "nikitabobko/tap"
 cask "aerospace"
-tap "FelixKratz/formulae"
-brew "sketchybar"
 
 # Fonts
 cask "font-jetbrains-mono-nerd-font"

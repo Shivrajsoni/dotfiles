@@ -34,8 +34,8 @@ defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
 # ── Menu bar ────────────────────────────────────────────────────────
-# Auto-hide: sketchybar takes its place
-defaults write NSGlobalDomain _HIHideMenuBar -bool true
+# Native menu bar always visible
+defaults write NSGlobalDomain _HIHideMenuBar -bool false
 
 # ── Dock ────────────────────────────────────────────────────────────
 # Auto-hide dock

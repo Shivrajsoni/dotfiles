@@ -25,13 +25,11 @@ bash bootstrap.sh --dry-run    # preview every action
 ├── config/                # → ~/.config
 │   ├── shell/common.sh    # aliases, PATH, lazy nvm — shared by zsh + bash (not linked, sourced)
 │   ├── starship/  wezterm/  fastfetch/
-│   └── aerospace/  sketchybar/   # tiling WM + status bar (macOS)
+│   └── aerospace/         # tiling WM (macOS)
 ├── scripts/               # lib.sh, dev-toolchain.sh, macos-defaults.sh, linux-packages.sh
 ├── obsidian/              # vault settings (manual copy)
 ├── Brewfile  Makefile  bootstrap.sh
 ```
-
-AeroSpace's `gaps.outer.top` must clear the sketchybar (`BAR_Y_OFFSET + BAR_HEIGHT` in `config/sketchybar/variables.sh`). Change one, change the other.
 
 ## Machine-specific overrides
 

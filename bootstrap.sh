@@ -47,7 +47,6 @@ LINKS=(
 )
 [ "$OS" = mac ] && LINKS+=(
   "config/aerospace:$HOME/.config/aerospace"
-  "config/sketchybar:$HOME/.config/sketchybar"
 )
 
 for entry in "${LINKS[@]}"; do
@@ -72,10 +71,6 @@ done
 grep -qs "DOTFILES=" "$HOME/.zshenv" || run sh -c "echo 'export DOTFILES=\"$DOTFILES_DIR\"' >> \"$HOME/.zshenv\""
 
 [ -d "$HOME/.tmux/plugins/tpm" ] || run git clone -q https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-
-if [ "$OS" = mac ] && ! $LINK_ONLY; then
-  run brew services start sketchybar
-fi
 
 # ── 4. Default shell → zsh ──────────────────────────────────────────
 ZSH_PATH="$(command -v zsh || true)"
